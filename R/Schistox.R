@@ -18,8 +18,6 @@
 #' }
 #'
 #' @export
-#'
-#'
 schistox_setup <- function (...){
   julia <- JuliaCall::julia_setup(...)
   JuliaCall::julia_library("Distributions")
@@ -32,8 +30,8 @@ schistox_setup <- function (...){
 #' Return the default parameters defined in the julia package
 #'
 #' @return parameters Julia structure
-#' @export
 #' @examples
+#' @export
 default_pars <- function(){
   pars =  JuliaCall::julia_eval("Parameters()")
   return(  pars)
@@ -48,11 +46,11 @@ default_pars <- function(){
 #' @param miracidia  environmental miracidia
 #' @param cercariae  environmental miracidia
 #' @param pars  parameter set
-#' @export
 #'  @example
 #' \donttest{
 #'  save_population_to_file(filename, humans, miracidia, cercariae, pars)
 #' }
+#' @export
 save_population_to_file <- function(filename, humans, miracidia, cercariae, pars){
   JuliaCall::julia_assign("filename", filename)
   JuliaCall::julia_assign("humans", humans)
@@ -250,7 +248,6 @@ set_pars <- function(N, time_step, N_communities, community_probs,
 #' @param input_contact_rates  the contact rates corresponding to the ages in the input_ages variable
 #'
 #' @return will return the parameters object
-#' @export
 #' @examples
 #' \donttest{
 #' # define input ages
@@ -266,6 +263,7 @@ set_pars <- function(N, time_step, N_communities, community_probs,
 #' #pars = default_pars()
 #' #pars = make_age_contact_rate_array(pars, scenario, input_ages, input_contact_rates)
 #'}
+#' @export
 make_age_contact_rate_array <- function(pars, scenario, input_ages, input_contact_rates){
 
 
@@ -288,8 +286,8 @@ make_age_contact_rate_array <- function(pars, scenario, input_ages, input_contac
 #' @param num_steps  how many steps forward to take
 #' @param humans  the humans
 #' @param pars  parameters used
-#' @export
 #' @return will return the human population container
+#' @export
 generate_ages_and_deaths <- function(num_steps, humans, pars){
   JuliaCall::julia_assign("num_steps", num_steps)
   JuliaCall::julia_assign("humans", humans)
@@ -322,7 +320,6 @@ create_contact_settings <- function(scenario){
 #'
 #' @return list(humans, miracidia, cercariae)
 #' @export
-#'
 create_population_specified_ages <- function(pars){
 
   JuliaCall::julia_assign("pars", pars)
@@ -481,9 +478,8 @@ create_mda <- function(pre_SAC_prop, SAC_prop, adult_prop, first_mda_time,
 #' @param num_repeats how many times do we repeat the simulation
 #'
 #' @return
-#' @export
-#'
 #' @examples
+#' @export
 run_repeated_sims_no_population_change<- function(filename, num_time_steps, mda_info, vaccine_info, num_repeats){
   JuliaCall::julia_assign("filename", filename)
   JuliaCall::julia_assign("num_time_steps", num_time_steps)
@@ -514,9 +510,9 @@ run_repeated_sims_no_population_change<- function(filename, num_time_steps, mda_
 #' @param num_repeats
 #'
 #' @return
-#' @export
 #'
 #' @examples
+#' @export
 run_repeated_sims_no_population_change_increasing<- function(filename, num_time_steps, mda_info, vaccine_info, num_repeats){
   JuliaCall::julia_assign("filename", filename)
   JuliaCall::julia_assign("num_time_steps", num_time_steps)
@@ -548,9 +544,9 @@ run_repeated_sims_no_population_change_increasing<- function(filename, num_time_
 #' @param adult_prop what proportion of adults receive MDA
 #'
 #' @return
-#' @export
 #'
 #' @examples
+#' @export
 add_to_mda <- function(mda_info, mda_start_time, last_mda_time,  regularity,
                        drug_efficacy, pre_SAC_prop, SAC_prop, adult_prop){
 
@@ -630,9 +626,9 @@ return_sim_values <- function(record){
 #' @param male_worms
 #'
 #' @return
-#' @export
 #'
 #' @examples
+#' @export
 calculate_worm_pairs <- function(female_worms, male_worms){
   f_worms = array(0, length(female_worms))
   m_worms = array(0, length(male_worms))
@@ -675,9 +671,9 @@ function get_ages_eggs_worms(humans)
 #' @param drug_effectiveness
 #'
 #' @return
-#' @export
 #'
 #' @examples
+#' @export
 administer_drug <- function(humans, indices, drug_effectiveness){
 
 
