@@ -2,7 +2,7 @@
 % Please edit documentation in R/Schistox.R
 \name{add_to_mda}
 \alias{add_to_mda}
-\title{Title}
+\title{add to MDA schedule}
 \usage{
 add_to_mda(
   mda_info,
@@ -16,11 +16,25 @@ add_to_mda(
 )
 }
 \arguments{
-\item{adult_prop}{}
+\item{mda_info}{current MDA information}
+
+\item{mda_start_time}{start time for new MDAs}
+
+\item{last_mda_time}{end time for new MDAs}
+
+\item{regularity}{how regularly the MDA takes place in years (1 is once a year, 0.5 is twice a year)}
+
+\item{drug_efficacy}{how effective the drug is}
+
+\item{pre_SAC_prop}{what proportion of pre school age children receive MDA}
+
+\item{SAC_prop}{what proportion of school age children receive MDA}
+
+\item{adult_prop}{what proportion of adults receive MDA}
 }
 \value{
 
 }
 \description{
-Title
+add to MDA schedule
 }

@@ -12,8 +12,3 @@ parameters Julia structure
 \description{
 Return the default parameters defined in the julia package
 }
-\examples{
-\donttest{
- pars = default_pars()
-}
-}

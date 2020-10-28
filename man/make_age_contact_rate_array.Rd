@@ -24,7 +24,7 @@ Make the contact by age array given the specified inputs
 \examples{
 \donttest{
 # define input ages
-input_ages = array(data = c(as.integer(4), as.integer(9), as.integer(15), as.integer(max_age)))
+input_ages = array(data = c(as.integer(4), as.integer(9), as.integer(15), as.integer(120)))
 
 # define contact rates for age groups
 input_contact_rates = array(data = c(0.64, 0.91, 1, 0.018))
@@ -33,6 +33,7 @@ input_contact_rates = array(data = c(0.64, 0.91, 1, 0.018))
 input_contact_rates = input_contact_rates/sum(input_contact_rates)
 
 # make the contact by age array within the parameters object
-pars = make_age_contact_rate_array(pars, scenario, input_ages, input_contact_rates)
+#pars = default_pars()
+#pars = make_age_contact_rate_array(pars, scenario, input_ages, input_contact_rates)
 }
 }

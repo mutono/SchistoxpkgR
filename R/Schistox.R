@@ -34,9 +34,6 @@ schistox_setup <- function (...){
 #' @return parameters Julia structure
 #' @export
 #' @examples
-#'\donttest{
-#'  pars = default_pars()
-#' }
 default_pars <- function(){
   pars =  JuliaCall::julia_eval("Parameters()")
   return(  pars)
@@ -254,9 +251,10 @@ set_pars <- function(N, time_step, N_communities, community_probs,
 #'
 #' @return will return the parameters object
 #' @export
-#' @examples \donttest{
+#' @examples
+#' \donttest{
 #' # define input ages
-#' input_ages = array(data = c(as.integer(4), as.integer(9), as.integer(15), as.integer(max_age)))
+#' input_ages = array(data = c(as.integer(4), as.integer(9), as.integer(15), as.integer(120)))
 #'
 #'# define contact rates for age groups
 #' input_contact_rates = array(data = c(0.64, 0.91, 1, 0.018))
@@ -265,7 +263,8 @@ set_pars <- function(N, time_step, N_communities, community_probs,
 #' input_contact_rates = input_contact_rates/sum(input_contact_rates)
 #'
 #' # make the contact by age array within the parameters object
-#' pars = make_age_contact_rate_array(pars, scenario, input_ages, input_contact_rates)
+#' #pars = default_pars()
+#' #pars = make_age_contact_rate_array(pars, scenario, input_ages, input_contact_rates)
 #'}
 make_age_contact_rate_array <- function(pars, scenario, input_ages, input_contact_rates){
 
@@ -415,8 +414,9 @@ update_env_constant_population_increasing<- function(num_time_steps, humans,  mi
   JuliaCall::julia_assign("vaccine_info", vaccine_info)
 
 
-  list[humans, miracidia, cercariae, record] = JuliaCall::julia_eval("update_env_constant_population_increasing(num_time_steps, humans,  miracidia, cercariae, pars, mda_info, vaccine_info)")
-
+  x = JuliaCall::julia_eval("update_env_constant_population_increasing(num_time_steps, humans,  miracidia, cercariae, pars, mda_info, vaccine_info)")
+  env = list("humans" = x[[1]], "miracidia" = x[[2]], "cercariae" = x[[3]], "record" = x[[4]])
+  return(env)
 }
 
 
@@ -472,13 +472,13 @@ create_mda <- function(pre_SAC_prop, SAC_prop, adult_prop, first_mda_time,
 
 
 
-#' Title
+#' run simulations where the population doesn't change
 #'
-#' @param filename
-#' @param num_time_steps
-#' @param mda_info
-#' @param vaccine_info
-#' @param num_repeats
+#' @param filename name of file to store population in
+#' @param num_time_steps how many time steps to step forward
+#' @param mda_info container for all MDAs to take place
+#' @param vaccine_info container for all vaccination programs to take place
+#' @param num_repeats how many times do we repeat the simulation
 #'
 #' @return
 #' @export
@@ -491,8 +491,14 @@ run_repeated_sims_no_population_change<- function(filename, num_time_steps, mda_
   JuliaCall::julia_assign("vaccine_info", vaccine_info)
   JuliaCall::julia_assign("num_repeats", num_repeats)
 
-  list[times, prev, sac_prev, high_burden, high_burden_sac, adult_prev, high_adult_burden] =
+  x =
     JuliaCall::julia_eval("run_repeated_sims_no_population_change(filename, num_time_steps, mda_info, vaccine_info, num_repeats)")
+
+
+  env = list("times" = x[[1]], "prev" = x[[2]], "sac_prev" = x[[3]], "high_burden" = x[[4]],
+             "high_burden_sac" = x[[5]], "adult_prev" = x[[6]], "high_adult_burden" = x[[7]])
+
+  return(env)
 }
 
 
@@ -518,23 +524,28 @@ run_repeated_sims_no_population_change_increasing<- function(filename, num_time_
   JuliaCall::julia_assign("vaccine_info", vaccine_info)
   JuliaCall::julia_assign("num_repeats", num_repeats)
 
-  list[times, prev, sac_prev, high_burden, high_burden_sac, adult_prev, high_adult_burden] =
+  x =
     JuliaCall::julia_eval("run_repeated_sims_no_population_change_increasing(filename, num_time_steps, mda_info, vaccine_info, num_repeats)")
+
+  env = list("times" = x[[1]], "prev" = x[[2]], "sac_prev" = x[[3]], "high_burden" = x[[4]],
+             "high_burden_sac" = x[[5]], "adult_prev" = x[[6]], "high_adult_burden" = x[[7]])
+
+  return(env)
 }
 
 
 
 
-#' Title
+#' add to MDA schedule
 #'
-#' @param mda_info
-#' @param mda_start_time
-#' @param last_mda_time
-#' @param regularity
-#' @param drug_efficacy
-#' @param pre_SAC_prop
-#' @param SAC_prop
-#' @param adult_prop
+#' @param mda_info current MDA information
+#' @param mda_start_time start time for new MDAs
+#' @param last_mda_time end time for new MDAs
+#' @param regularity how regularly the MDA takes place in years (1 is once a year, 0.5 is twice a year)
+#' @param drug_efficacy how effective the drug is
+#' @param pre_SAC_prop what proportion of pre school age children receive MDA
+#' @param SAC_prop what proportion of school age children receive MDA
+#' @param adult_prop what proportion of adults receive MDA
 #'
 #' @return
 #' @export
@@ -544,7 +555,7 @@ add_to_mda <- function(mda_info, mda_start_time, last_mda_time,  regularity,
                        drug_efficacy, pre_SAC_prop, SAC_prop, adult_prop){
 
   JuliaCall::julia_assign("mda_info", mda_info)
-  JuliaCall::julia_assign("mda_start_time", mda_restart)
+  JuliaCall::julia_assign("mda_start_time", mda_start_time)
   JuliaCall::julia_assign("last_mda_time", last_mda_time)
   JuliaCall::julia_assign("drug_efficacy", drug_efficacy)
   JuliaCall::julia_assign("pre_SAC_prop", pre_SAC_prop)
