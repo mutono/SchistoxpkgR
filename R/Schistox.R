@@ -32,6 +32,7 @@ schistox_setup <- function (...){
 #' Return the default parameters defined in the julia package
 #'
 #' @return parameters Julia structure
+#' @export
 #' @examples
 #'\donttest{
 #'  pars = default_pars()
@@ -50,6 +51,7 @@ default_pars <- function(){
 #' @param miracidia  environmental miracidia
 #' @param cercariae  environmental miracidia
 #' @param pars  parameter set
+#' @export
 #'  @example
 #' \donttest{
 #'  save_population_to_file(filename, humans, miracidia, cercariae, pars)
@@ -158,50 +160,19 @@ get_dot_mean<- function(a){
 #' a human will mature into a worm (Int)
 #' @param input_ages input ages for constructing contact array
 #' @param input_contact_rates input rates for constructing contact array
-set_pars <- function(N,
-                     time_step,
-                     N_communities,
-                     community_probs,
-                     community_contact_rate,
-                     density_dependent_fecundity,
-                     average_worm_lifespan,
-                     max_age,
-                     initial_worms,
-                     initial_miracidia,
-                     initial_miracidia_days,
-                     init_env_cercariae,
-                     worm_stages,
-                     contact_rate,
-                     max_fecundity,
-                     age_contact_rates,
-                     ages_for_contacts,
-                     contact_rate_by_age_array,
-                     mda_adherence,
-                     mda_access,
-                     female_factor,
-                     male_factor,
-                     miracidia_maturity,
-                     birth_rate,
-                     human_cercariae_prop,
-                     predis_aggregation,
-                     cercariae_survival,
-                     miracidia_survival,
-                     death_prob_by_age,
-                     ages_for_death,
-                     r,
-                     vaccine_effectiveness,
-                     drug_effectiveness,
-                     spec_ages,
-                     ages_per_index,
-                     record_frequency,
-                     use_kato_katz,
-                     kato_katz_par,
-                     heavy_burden_threshold,
-                     rate_acquired_immunity,
-                     M0,
-                     human_larvae_maturity_time,
-                     input_ages,
-                     input_contact_rates){
+#' @export
+set_pars <- function(N, time_step, N_communities, community_probs,
+                     community_contact_rate, density_dependent_fecundity,
+                     average_worm_lifespan, max_age, initial_worms,
+                     initial_miracidia, initial_miracidia_days, init_env_cercariae,
+                     worm_stages, contact_rate, max_fecundity, age_contact_rates,
+                     ages_for_contacts, contact_rate_by_age_array, mda_adherence,
+                     mda_access, female_factor, male_factor, miracidia_maturity,
+                     birth_rate, human_cercariae_prop, predis_aggregation, cercariae_survival,
+                     miracidia_survival, death_prob_by_age, ages_for_death, r,
+                     vaccine_effectiveness, drug_effectiveness, spec_ages, ages_per_index,
+                     record_frequency, use_kato_katz, kato_katz_par, heavy_burden_threshold,
+                     rate_acquired_immunity, M0, human_larvae_maturity_time, input_ages, input_contact_rates){
 
   JuliaCall::julia_assign("N", N)
   JuliaCall::julia_assign("time_step", time_step)
@@ -282,6 +253,7 @@ set_pars <- function(N,
 #' @param input_contact_rates  the contact rates corresponding to the ages in the input_ages variable
 #'
 #' @return will return the parameters object
+#' @export
 #' @examples \donttest{
 #' # define input ages
 #' input_ages = array(data = c(as.integer(4), as.integer(9), as.integer(15), as.integer(max_age)))
@@ -317,7 +289,7 @@ make_age_contact_rate_array <- function(pars, scenario, input_ages, input_contac
 #' @param num_steps  how many steps forward to take
 #' @param humans  the humans
 #' @param pars  parameters used
-#'
+#' @export
 #' @return will return the human population container
 generate_ages_and_deaths <- function(num_steps, humans, pars){
   JuliaCall::julia_assign("num_steps", num_steps)

@@ -15,11 +15,7 @@ save_population_to_file(filename, humans, miracidia, cercariae, pars)
 
 \item{cercariae}{environmental miracidia}
 
-\item{pars}{parameter set
- @example
-\donttest{
- save_population_to_file(filename, humans, miracidia, cercariae, pars)
-}}
+\item{pars}{parameter set}
 }
 \description{
 Save humans, environmental cercariae and mircacidia to a file along with the parameters used.
