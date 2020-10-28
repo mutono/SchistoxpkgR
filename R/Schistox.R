@@ -60,14 +60,24 @@ save_population_to_file <- function(filename, humans, miracidia, cercariae, pars
 }
 
 
-get_data_from_record <- JuliaCall::julia_eval("
-function get_data_from_record(record)
+#' output information from julia recorded data
+#'
+#' @param record variable which stores the data
+#'
+#' @export
+get_data_from_record <- function( record){
+
+  JuliaCall::julia_assign("record", record)
+  JuliaCall::julia_eval("
+    function get_data_from_record(record)
     sac_burden = (p->p.sac_burden[1]).(record)
     sac_heavy_burden = (p->p.sac_burden[3]).(record)
     times = (p->p.time).(record);
     return sac_burden, sac_heavy_burden, times
   end
 ")
+
+}
 
 
 
