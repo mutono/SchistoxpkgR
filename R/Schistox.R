@@ -1,5 +1,3 @@
-
-
 # Schistosomiasis model with an R interface running functions from Julia package Schistoxpkg
 
 
