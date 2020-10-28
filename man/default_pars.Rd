@@ -12,3 +12,7 @@ parameters Julia structure
 \description{
 Return the default parameters defined in the julia package
 }
+\examples{
+\donttest{schistox_setup()
+pars = default_pars()}
+}

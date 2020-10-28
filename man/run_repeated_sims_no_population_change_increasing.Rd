@@ -2,7 +2,7 @@
 % Please edit documentation in R/Schistox.R
 \name{run_repeated_sims_no_population_change_increasing}
 \alias{run_repeated_sims_no_population_change_increasing}
-\title{Title}
+\title{run simulations where the population doesn't change and the egg production function is monotonically increasing}
 \usage{
 run_repeated_sims_no_population_change_increasing(
   filename,
@@ -13,11 +13,16 @@ run_repeated_sims_no_population_change_increasing(
 )
 }
 \arguments{
-\item{num_repeats}{}
-}
-\value{
+\item{filename}{name of file to store population in}
 
+\item{num_time_steps}{how many time steps to step forward}
+
+\item{mda_info}{container for all MDAs to take place}
+
+\item{vaccine_info}{container for all vaccination programs to take place}
+
+\item{num_repeats}{how many times do we repeat the simulation}
 }
 \description{
-Title
+run simulations where the population doesn't change and the egg production function is monotonically increasing
 }

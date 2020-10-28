@@ -2,16 +2,17 @@
 % Please edit documentation in R/Schistox.R
 \name{administer_drug}
 \alias{administer_drug}
-\title{Title}
+\title{Administer drugs to specified individuals.}
 \usage{
 administer_drug(humans, indices, drug_effectiveness)
 }
 \arguments{
-\item{drug_effectiveness}{}
-}
-\value{
+\item{humans}{human population}
 
+\item{indices}{which individuals to administer drug to}
+
+\item{drug_effectiveness}{how effective the drug is}
 }
 \description{
-Title
+Administer drugs to specified individuals.
 }

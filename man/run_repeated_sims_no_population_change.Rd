@@ -23,9 +23,6 @@ run_repeated_sims_no_population_change(
 
 \item{num_repeats}{how many times do we repeat the simulation}
 }
-\value{
-
-}
 \description{
 run simulations where the population doesn't change
 }

@@ -32,9 +32,6 @@ add_to_mda(
 
 \item{adult_prop}{what proportion of adults receive MDA}
 }
-\value{
-
-}
 \description{
 add to MDA schedule
 }

@@ -48,7 +48,8 @@ set_pars(
   M0,
   human_larvae_maturity_time,
   input_ages,
-  input_contact_rates
+  input_contact_rates,
+  scenario
 )
 }
 \arguments{
@@ -73,8 +74,9 @@ of worms (Float)}
 \item{max_age}{maximum age of human in the population (Float)}
 
 \item{initial_worms}{number of worms in each person to begin with. The actual number in
-each person if chosen from a Poisson distirubiton with this mean (Int)
- @param initial_miracidia initial number of miracidia larvae in the environment (Int)}
+each person if chosen from a Poisson distirubiton with this mean (Int)}
+
+\item{initial_miracidia}{initial number of miracidia larvae in the environment (Int)}
 
 \item{initial_miracidia_days}{miracidia will age into cercariae larvae after a specified
 number of days. This parameter will specify how many days of initial_miracidia we
@@ -163,6 +165,8 @@ a human will mature into a worm (Int)}
 \item{input_ages}{input ages for constructing contact array}
 
 \item{input_contact_rates}{input rates for constructing contact array}
+
+\item{scenario}{can be one of "low adult", "moderate adult", "high adult"}
 }
 \description{
 Set the parameters to the desired values.

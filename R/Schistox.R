@@ -28,7 +28,8 @@ schistox_setup <- function (...){
 #' Return the default parameters defined in the julia package
 #'
 #' @return parameters Julia structure
-#' @examples
+#' @examples \donttest{schistox_setup()
+#' pars = default_pars()}
 #' @export
 default_pars <- function(){
   pars =  JuliaCall::julia_eval("Parameters()")
@@ -44,9 +45,8 @@ default_pars <- function(){
 #' @param miracidia  environmental miracidia
 #' @param cercariae  environmental miracidia
 #' @param pars  parameter set
-#'  @example
-#' \donttest{
-#'  save_population_to_file(filename, humans, miracidia, cercariae, pars)
+#' @examples \donttest{
+#'  ## save_population_to_file(filename, humans, miracidia, cercariae, pars)
 #' }
 #' @export
 save_population_to_file <- function(filename, humans, miracidia, cercariae, pars){
@@ -98,49 +98,49 @@ get_dot_mean<- function(a){
 #' @param max_age maximum age of human in the population (Float)
 #' @param initial_worms number of worms in each person to begin with. The actual number in
 #' each person if chosen from a Poisson distirubiton with this mean (Int)
-#'  @param initial_miracidia initial number of miracidia larvae in the environment (Int)
-#' @param  initial_miracidia_days miracidia will age into cercariae larvae after a specified
+#' @param initial_miracidia initial number of miracidia larvae in the environment (Int)
+#' @param initial_miracidia_days miracidia will age into cercariae larvae after a specified
 #' number of days. This parameter will specify how many days of initial_miracidia we
 #' will have already had in the environment (Int)
-#' @param  init_env_cercariae initial number of cercariae larvae in the environment (Int)
-#' @param  worm_stages how many age stages are there for the worms. Having 1 stage will give
+#' @param init_env_cercariae initial number of cercariae larvae in the environment (Int)
+#' @param worm_stages how many age stages are there for the worms. Having 1 stage will give
 #' Gamma distributed death ages, while more than 1 will result in Erlang distribution (Int)
-#' @param  contact_rate global contact rate for the uptake of larvae from the environment (Float)
-#' @param  max_fecundity expected number of eggs from a single worm pair. The actual number
+#' @param contact_rate global contact rate for the uptake of larvae from the environment (Float)
+#' @param max_fecundity expected number of eggs from a single worm pair. The actual number
 #' will be chosen from a distribution with this mean (Float)
-#' @param  age_contact_rates contact rate for chosen age groups(Array(Float))
-#' @param  ages_for_contacts age groups for specifying contact rates (Array(Int))
-#' @param  contact_rate_by_age_array array holding contact rate for each age (Array(Float))
-#' @param  mda_adherence proportion of people who adhere to the mda (Float)
-#' @param  mda_access proportion of people who have access to the mda (Float)
-#' @param  female_factor factor for altering the contact rate for females, if we choose to
+#' @param age_contact_rates contact rate for chosen age groups(Array(Float))
+#' @param ages_for_contacts age groups for specifying contact rates (Array(Int))
+#' @param contact_rate_by_age_array array holding contact rate for each age (Array(Float))
+#' @param mda_adherence proportion of people who adhere to the mda (Float)
+#' @param mda_access proportion of people who have access to the mda (Float)
+#' @param female_factor factor for altering the contact rate for females, if we choose to
 #' have gender specific behaviour which affects contact rate (Float)
-#' @param  male_factor factor for altering the contact rate for males, if we choose to have
+#' @param male_factor factor for altering the contact rate for males, if we choose to have
 #' gender specific behaviour which affects contact rate (Float)
-#' @param  miracidia_maturity number of days after which miracidias will mature to cercariae (Int)
-#' @param  birth_rate rate of birth of humans (Float)
-#' @param  human_cercariae_prop proportion of cercariae which are able to infect humans (Float)
-#' @param  predis_aggregation aggregation for predisposition of individuals to uptake larvae.
+#' @param miracidia_maturity number of days after which miracidias will mature to cercariae (Int)
+#' @param birth_rate rate of birth of humans (Float)
+#' @param human_cercariae_prop proportion of cercariae which are able to infect humans (Float)
+#' @param predis_aggregation aggregation for predisposition of individuals to uptake larvae.
 #' This is chosen from a Gamma distribution with mean 1 for each individual and set for
 #' life. If this is high, then the aggregation is low, meaning that most individuals
 #' have roughly the same predisposition. If it is low, then the larvae become
 #' concentrated in a few individuals. (Float)
-#' @param  cercariae_survival what proportion of cercariae survive from one time point
+#' @param cercariae_survival what proportion of cercariae survive from one time point
 #' to the next (Float)
-#' @param  miracidia_survival what proportion of miracidia survive from one time point
+#' @param miracidia_survival what proportion of miracidia survive from one time point
 #' to the next (Float)
-#' @param  death_prob_by_age for specified age range, what is the probability of dying
+#' @param death_prob_by_age for specified age range, what is the probability of dying
 #' each year (Array(Float))
-#' @param  ages_for_death age ranges for death probabilities (Array(Float))
-#' @param  r aggregation parameter for negative binomially distributed egg production (Float)
-#' @param  vaccine_effectiveness efficacy of a vaccine if one is used(Float)
-#' @param  drug_effectiveness efficacy of a drug given during MDA(Float)
-#' @param  spec_ages number of individuals by age group which we specify if we want a
+#' @param ages_for_death age ranges for death probabilities (Array(Float))
+#' @param r aggregation parameter for negative binomially distributed egg production (Float)
+#' @param vaccine_effectiveness efficacy of a vaccine if one is used(Float)
+#' @param drug_effectiveness efficacy of a drug given during MDA(Float)
+#' @param spec_ages number of individuals by age group which we specify if we want a
 #' particular age distribution for the simulation (Array(Float))
-#' @param  ages_per_index how many different ages we include in the spec_ages parameter (Int)
-#' @param  record_frequency how often we should record the prevalence in the population
+#' @param ages_per_index how many different ages we include in the spec_ages parameter (Int)
+#' @param record_frequency how often we should record the prevalence in the population
 #' during simulation (Float)
-#' @param  use_kato_katz if 0, then don't use Kato-Katz (KK) for egg counts, if 1, use KK (Int)
+#' @param use_kato_katz if 0, then don't use Kato-Katz (KK) for egg counts, if 1, use KK (Int)
 #' @param kato_katz_par parameter for Gamma distribution if KK is used (Float)
 #' @param heavy_burden_threshold number of eggs at which an individual is said to have a
 #' heavy infection (Int)
@@ -149,10 +149,11 @@ get_dot_mean<- function(a){
 #' their life to decide the level of immunity acquired (Float)
 #' @param M0 if a particular for of egg production is used, this parameter is required and is
 #' a proxy for mean worm burden (Float)
-#' @param  human_larvae_maturity_time length of time in days after which a cercariae uptaken by
+#' @param human_larvae_maturity_time length of time in days after which a cercariae uptaken by
 #' a human will mature into a worm (Int)
 #' @param input_ages input ages for constructing contact array
 #' @param input_contact_rates input rates for constructing contact array
+#' @param scenario can be one of "low adult", "moderate adult", "high adult"
 #' @export
 set_pars <- function(N, time_step, N_communities, community_probs,
                      community_contact_rate, density_dependent_fecundity,
@@ -165,7 +166,8 @@ set_pars <- function(N, time_step, N_communities, community_probs,
                      miracidia_survival, death_prob_by_age, ages_for_death, r,
                      vaccine_effectiveness, drug_effectiveness, spec_ages, ages_per_index,
                      record_frequency, use_kato_katz, kato_katz_par, heavy_burden_threshold,
-                     rate_acquired_immunity, M0, human_larvae_maturity_time, input_ages, input_contact_rates){
+                     rate_acquired_immunity, M0, human_larvae_maturity_time, input_ages, input_contact_rates,
+                     scenario){
 
   JuliaCall::julia_assign("N", N)
   JuliaCall::julia_assign("time_step", time_step)
@@ -214,6 +216,7 @@ set_pars <- function(N, time_step, N_communities, community_probs,
   JuliaCall::julia_assign("M0", M0)
 
   JuliaCall::julia_assign("human_larvae_maturity_time", human_larvae_maturity_time)
+  JuliaCall::julia_assign("scenario", scenario)
 
  pars = JuliaCall::julia_eval("Parameters(N, time_step, N_communities, community_probs, community_contact_rate,
              density_dependent_fecundity, average_worm_lifespan,
@@ -240,7 +243,7 @@ set_pars <- function(N, time_step, N_communities, community_probs,
 
 #' Make the contact by age array given the specified inputs
 #'
-#' @param max_age  maximum age for a human
+#' @param pars  parameters we are using
 #' @param scenario  can be one of "low adult", "moderate adult" and "high adult"
 #' @param input_ages  if scenario not specified, we can input ages at which we wish contact rates to change. Ages must be integers, and input with as.integer()
 #' @param input_contact_rates  the contact rates corresponding to the ages in the input_ages variable
@@ -474,9 +477,6 @@ create_mda <- function(pre_SAC_prop, SAC_prop, adult_prop, first_mda_time,
 #' @param mda_info container for all MDAs to take place
 #' @param vaccine_info container for all vaccination programs to take place
 #' @param num_repeats how many times do we repeat the simulation
-#'
-#' @return
-#' @examples
 #' @export
 run_repeated_sims_no_population_change<- function(filename, num_time_steps, mda_info, vaccine_info, num_repeats){
   JuliaCall::julia_assign("filename", filename)
@@ -499,17 +499,14 @@ run_repeated_sims_no_population_change<- function(filename, num_time_steps, mda_
 
 
 
-#' Title
+#' run simulations where the population doesn't change and the egg production function is monotonically increasing
 #'
-#' @param filename
-#' @param num_time_steps
-#' @param mda_info
-#' @param vaccine_info
-#' @param num_repeats
+#' @param filename name of file to store population in
+#' @param num_time_steps how many time steps to step forward
+#' @param mda_info container for all MDAs to take place
+#' @param vaccine_info container for all vaccination programs to take place
+#' @param num_repeats how many times do we repeat the simulation
 #'
-#' @return
-#'
-#' @examples
 #' @export
 run_repeated_sims_no_population_change_increasing<- function(filename, num_time_steps, mda_info, vaccine_info, num_repeats){
   JuliaCall::julia_assign("filename", filename)
@@ -541,9 +538,6 @@ run_repeated_sims_no_population_change_increasing<- function(filename, num_time_
 #' @param SAC_prop what proportion of school age children receive MDA
 #' @param adult_prop what proportion of adults receive MDA
 #'
-#' @return
-#'
-#' @examples
 #' @export
 add_to_mda <- function(mda_info, mda_start_time, last_mda_time,  regularity,
                        drug_efficacy, pre_SAC_prop, SAC_prop, adult_prop){
@@ -617,15 +611,11 @@ return_sim_values <- function(record){
 
 
 
-# function to calculate the number of worm pairs
-#' Title
+#' function to calculate the number of worm pairs
 #'
-#' @param female_worms
-#' @param male_worms
 #'
-#' @return
-#'
-#' @examples
+#' @param female_worms number of female worms for each individual
+#' @param male_worms number of male worms for each individual
 #' @export
 calculate_worm_pairs <- function(female_worms, male_worms){
   f_worms = array(0, length(female_worms))
@@ -662,15 +652,11 @@ function get_ages_eggs_worms(humans)
 
 
 
-#' Title
+#' Administer drugs to specified individuals.
 #'
-#' @param humans
-#' @param indices
-#' @param drug_effectiveness
-#'
-#' @return
-#'
-#' @examples
+#' @param humans human population
+#' @param indices which individuals to administer drug to
+#' @param drug_effectiveness how effective the drug is
 #' @export
 administer_drug <- function(humans, indices, drug_effectiveness){
 

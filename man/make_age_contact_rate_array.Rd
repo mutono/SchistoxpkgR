@@ -7,13 +7,13 @@
 make_age_contact_rate_array(pars, scenario, input_ages, input_contact_rates)
 }
 \arguments{
+\item{pars}{parameters we are using}
+
 \item{scenario}{can be one of "low adult", "moderate adult" and "high adult"}
 
 \item{input_ages}{if scenario not specified, we can input ages at which we wish contact rates to change. Ages must be integers, and input with as.integer()}
 
 \item{input_contact_rates}{the contact rates corresponding to the ages in the input_ages variable}
-
-\item{max_age}{maximum age for a human}
 }
 \value{
 will return the parameters object
