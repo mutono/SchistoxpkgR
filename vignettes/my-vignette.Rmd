@@ -1,0 +1,197 @@
+---
+title: "my-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+First we have to load the needed library:
+```{r setup}
+library(SchistoxpkgR)
+```
+
+After this, we will need to setup the environment to use Julia and load the required Julia libraries by running
+```{r setup2}
+schistox_setup()
+```
+As we have many parameters, we will then need to define these so that we can run simulations. As these are passed to Julia to run, some parameters require special formatting, such as population size must be passed ```as.integer(N)```. Below we define all parameters required and initialize the ```Parameters``` object needed to run the code. Definitions of the parameters can be found by running ```?set_pars```.
+```{r define_params}
+N = as.integer(1000)    
+time_step = 10
+N_communities = 1
+community_probs = JuliaCall::julia_eval("[1.0]", need_return =  "Julia")
+community_contact_rate = JuliaCall::julia_eval("[1.0]", need_return =  "Julia")
+density_dependent_fecundity = 0.0007 # for S. mansoni [Toor et al JID paper SI]
+#density_dependent_fecundity = 0.0006 # for S. haematobium [Toor et al JID paper SI]
+average_worm_lifespan = 5.7 # years for S. mansoni [Toor et al JID paper SI]
+#average_worm_lifespan = 4 # years for S. haematobium [Toor et al JID paper SI]
+max_age = 100
+initial_worms = 0
+
+# miracidia_maturity = 21 # for S. haemotobium 
+miracidia_maturity = 24 # for S. mansoni 
+initial_miracidia = 100000*N/1000
+initial_miracidia_days = round(miracidia_maturity/time_step)
+init_env_cercariae = 100000*N/1000
+worm_stages = as.integer(1)
+contact_rate = 0.09
+max_fecundity = 0.34  # for S. mansoni [Toor et al JID paper SI]
+#max_fecundity = 0.3  # for S. haematobium [Toor et al JID paper SI]
+age_contact_rates = c(0.032, 0.610, 1, 0.06)
+ages_for_contacts = c(4, 9, 15, 100)
+contact_rate_by_age_array = rep(0,101)
+
+mda_adherence = .9
+mda_access = .9
+female_factor = 1
+male_factor = 1
+birth_rate = 28*time_step/(1000*365)
+human_cercariae_prop = 1
+
+predis_aggregation = 0.24 # 0.24 for high prev settings; 0.04 for low prev settings # From "The design of schistosomiasis monitoring and evaluation programmes:
+#The importance of collecting adult data to inform treatment strategies for Schistosoma mansoni"
+cercariae_survival = 1/2
+miracidia_survival = 1/2
+death_prob_by_age = c(0.0656, 0.0093, 0.003, 0.0023, 0.0027, 0.0038, 0.0044, 0.0048, 0.0053,
+                      0.0065, 0.0088, 0.0106, 0.0144, 0.021, 0.0333, 0.0529, 0.0851, 0.1366, 0.2183, 0.2998 , 0.3698, 1)
+ages_for_death = c(1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60,
+                   65, 70, 75, 80, 85, 90, 95, 100, 110)
+r = 0.03
+vaccine_effectiveness = 0.95
+drug_effectiveness = 0.863
+spec_ages = c(8639, 9082, 6424, 5074, 4425, 3847, 3628, 3062,
+              2436, 1770, 1868, 1066, 743, 518, 355, 144)
+ages_per_index = 5
+record_frequency = 1/24
+use_kato_katz = 0
+kato_katz_par = 0.87
+heavy_burden_threshold = 16
+rate_acquired_immunity = 0
+M0 = 20
+human_larvae_maturity_time = 30
+input_ages = array(0,dim=c(0))
+input_contact_rates = array(0,dim=c(0))
+scenario = "moderate adult"
+pars = set_pars(N,
+                time_step,
+                N_communities,
+                community_probs,
+                community_contact_rate,
+                density_dependent_fecundity,
+                average_worm_lifespan,
+                max_age,
+                initial_worms,
+                initial_miracidia,
+                initial_miracidia_days,
+                init_env_cercariae,
+                worm_stages,
+                contact_rate,
+                max_fecundity,
+                age_contact_rates,
+                ages_for_contacts,
+                contact_rate_by_age_array,
+                mda_adherence,
+                mda_access,
+                female_factor,
+                male_factor,
+                miracidia_maturity,
+                birth_rate,
+                human_cercariae_prop,
+                predis_aggregation,
+                cercariae_survival,
+                miracidia_survival,
+                death_prob_by_age,
+                ages_for_death,
+                r,
+                vaccine_effectiveness,
+                drug_effectiveness,
+                spec_ages,
+                ages_per_index,
+                record_frequency,
+                use_kato_katz,
+                kato_katz_par,
+                heavy_burden_threshold,
+                rate_acquired_immunity,
+                M0,
+                human_larvae_maturity_time,
+                input_ages, 
+                input_contact_rates, scenario)
+
+```
+Once we have defined the parameters, we can create the population and begin running simulations:
+```{r create_population, fig.dim = c(8, 6)}
+e = create_population_specified_ages(pars)
+humans = generate_ages_and_deaths(20000, e$humans, pars)
+humans = update_contact_rate(humans,  pars)
+
+
+mda_info = array(0,dim=c(0,0))
+vaccine_info = array(0,dim=c(0,0))
+number_years_equ = 250
+num_time_steps = as.integer(365*number_years_equ / time_step)
+num_repeats = 1
+
+
+
+e = update_env_constant_population(num_time_steps, humans,  e$miracidia, e$cercariae, pars, mda_info, vaccine_info)
+x = get_data_from_record(e$record)
+
+sac_burden = x[[1]]
+sac_heavy_burden = x[[2]]
+times = x[[3]]
+
+filename = "population.jld"
+save_population_to_file(filename, e$humans,  e$miracidia, e$cercariae, pars)
+
+plot(times, sac_burden, type = 'l', col = rgb(110/255, 99/255, 252/255), bty = 'n',
+     ylim = c(0, max(sac_burden)), lwd = 2, xlab = "year", ylab = "SAC prevalence")
+lines(times, sac_heavy_burden, col = rgb(30/255, 190/255, 160/255), lwd =2 )
+
+abline(h = 1, lwd = 2, lty = 2, col = rgb(2/255, 163/255, 217/255))
+abline(h=c(0,10,20, 30,40,50,60,70,80,90), col = 'lightgrey')
+
+
+legend('topright',legend=c("SAC prev", "SAC heavy burden"),
+       col=c(rgb(110/255, 99/255, 252/255), rgb(30/255, 190/255, 160/255)), lwd = c(2,2), lty = c(1,1), cex=1.2,
+       title="", text.font=18, bg='lightblue', bty = 'n')
+```
+
+We can then investigate the use of MDA's in reducing the prevalence of schistosomiasis in the population:
+```{r mda, fig.dim = c(8, 6)}
+num_repeats = 10 #number of simulations to run
+number_years = 20
+drug_efficacy = 0.863 #Toor et al. JID paper in SI: drug efficacy 86.3% for S. mansoni and 94% for S. haematobium
+num_time_steps = as.integer(365*number_years / time_step)
+
+mda_info = create_mda(0, .75, 0, 1,
+                      number_years, 1, c(0,1), c(0,1), c(0,1), drug_efficacy)
+
+
+
+e =  run_repeated_sims_no_population_change(filename, num_time_steps, mda_info, vaccine_info, num_repeats)
+
+
+
+
+
+plot(e$times, get_dot_mean(e$sac_prev), type = 'l', col = rgb(110/255, 99/255, 252/255), bty = 'n',
+     ylim = c(0,  max(get_dot_mean(e$sac_prev))), lwd = 2, xlab = "year", ylab = "SAC prevalence")
+lines(e$times, get_dot_mean(e$high_burden_sac), col = rgb(30/255, 190/255, 160/255), lwd =2 )
+abline(h = 1, lwd = 2, lty = 2, col = rgb(2/255, 163/255, 217/255))
+abline(v=c(0,5,10,15,20), col = 'lightgrey')
+abline(h=c(0,10,20, 30,40,50,60,70,80,90), col = 'lightgrey')
+
+
+legend('topright',legend=c("SAC prev", "SAC heavy burden", 'missed MDA window', 'heavy burden goal'),
+       col=c(rgb(110/255, 99/255, 252/255), rgb(30/255, 190/255, 160/255),'black', rgb(2/255, 163/255, 217/255)), lwd = c(2,2,2, 2), lty = c(1,1,2,2), cex=1.2,
+       title="", text.font=18, bg='lightblue', bty = 'n')
+
+```

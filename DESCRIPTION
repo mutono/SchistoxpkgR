@@ -4,7 +4,7 @@ Title: What the Package Does (Title Case)
 Version: 0.1.0
 Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
-Description:  An interface to 'Schistoxpkg.jl' <https://github.com/mattg3004/Schistoxpkg.jl> from the R programming language.
+Description: An interface to 'Schistoxpkg.jl' <https://github.com/mattg3004/Schistoxpkg.jl> from the R programming language.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -12,3 +12,7 @@ Imports:
   JuliaCall,
   testthat
 RoxygenNote: 7.1.1
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
