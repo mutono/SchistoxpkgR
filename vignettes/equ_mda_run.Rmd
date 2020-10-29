@@ -1,8 +1,8 @@
 ---
-title: "my-vignette"
+title: "Run to equilibrium and investigate a school age children mda program"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{my-vignette}
+  %\VignetteIndexEntry{equ_mda_run}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -126,7 +126,7 @@ pars = set_pars(N,
                 input_contact_rates, scenario)
 
 ```
-Once we have defined the parameters, we can create the population and begin running simulations:
+Once we have defined the parameters, we can create the population and begin running simulations. We must define mda and vaccine information here. If we wish to perform no MDA or vaccinations then we add these as ```mda_info = array(0,dim=c(0,0)); vaccine_info = array(0,dim=c(0,0))``` as seen below.:
 ```{r create_population, fig.dim = c(8, 6)}
 e = create_population_specified_ages(pars)
 humans = generate_ages_and_deaths(20000, e$humans, pars)
@@ -151,20 +151,20 @@ times = x[[3]]
 filename = "population.jld"
 save_population_to_file(filename, e$humans,  e$miracidia, e$cercariae, pars)
 
+
+
+
 plot(times, sac_burden, type = 'l', col = rgb(110/255, 99/255, 252/255), bty = 'n',
      ylim = c(0, max(sac_burden)), lwd = 2, xlab = "year", ylab = "SAC prevalence")
 lines(times, sac_heavy_burden, col = rgb(30/255, 190/255, 160/255), lwd =2 )
-
 abline(h = 1, lwd = 2, lty = 2, col = rgb(2/255, 163/255, 217/255))
 abline(h=c(0,10,20, 30,40,50,60,70,80,90), col = 'lightgrey')
-
-
 legend('topright',legend=c("SAC prev", "SAC heavy burden"),
        col=c(rgb(110/255, 99/255, 252/255), rgb(30/255, 190/255, 160/255)), lwd = c(2,2), lty = c(1,1), cex=1.2,
        title="", text.font=18, bg='lightblue', bty = 'n')
 ```
 
-We can then investigate the use of MDA's in reducing the prevalence of schistosomiasis in the population:
+We can then investigate the use of MDA's in reducing the prevalence of schistosomiasis in the population. The MDA performed here is 75% coverage in SAC once a year and is defined in the ```create_mda``` function (run ```?create_mda``` for docs):
 ```{r mda, fig.dim = c(8, 6)}
 num_repeats = 10 #number of simulations to run
 number_years = 20
@@ -188,10 +188,11 @@ lines(e$times, get_dot_mean(e$high_burden_sac), col = rgb(30/255, 190/255, 160/2
 abline(h = 1, lwd = 2, lty = 2, col = rgb(2/255, 163/255, 217/255))
 abline(v=c(0,5,10,15,20), col = 'lightgrey')
 abline(h=c(0,10,20, 30,40,50,60,70,80,90), col = 'lightgrey')
-
-
-legend('topright',legend=c("SAC prev", "SAC heavy burden", 'missed MDA window', 'heavy burden goal'),
-       col=c(rgb(110/255, 99/255, 252/255), rgb(30/255, 190/255, 160/255),'black', rgb(2/255, 163/255, 217/255)), lwd = c(2,2,2, 2), lty = c(1,1,2,2), cex=1.2,
+legend('topright',legend=c("SAC prev", "SAC heavy burden",
+                           'missed MDA window', 'heavy burden goal'),
+       col=c(rgb(110/255, 99/255, 252/255), rgb(30/255, 190/255, 160/255)
+             ,'black', rgb(2/255, 163/255, 217/255)), lwd = c(2,2,2, 2), 
+       lty = c(1,1,2,2), cex=1.2,
        title="", text.font=18, bg='lightblue', bty = 'n')
 
 ```
