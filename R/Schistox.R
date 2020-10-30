@@ -670,31 +670,6 @@ end
 
 
 
-return_sim_values <- function(record){
-
-  a = return_arrays_from_object(record)
-  times = array(NA,length(a[[1]]))
-  prev = array(NA,length(a[[1]]))
-  sac_prev = array(NA,length(a[[1]]))
-  high_burden = array(NA,length(a[[1]]))
-  high_burden_sac = array(NA,length(a[[1]]))
-  adult_prev = array(NA,length(a[[1]]))
-  high_adult_burden = array(NA,length(a[[1]]))
-
-  for (i in 1 : length(a[[1]])){
-    times[i] = a[[1]][[i]]
-    prev[i] = a[[2]][[i]]
-    sac_prev[i] = a[[3]][[i]]
-    high_burden[i] = a[[4]][[i]]
-    high_burden_sac[i] = a[[5]][[i]]
-    adult_prev[i] = a[[6]][[i]]
-    high_adult_burden[i] = a[[7]][[i]]
-  }
-
-  return(list(times, prev, sac_prev, high_burden, high_burden_sac, adult_prev, high_adult_burden))
-}
-
-
 
 #' function to calculate the number of worm pairs
 #'
@@ -716,6 +691,26 @@ calculate_worm_pairs <- function(female_worms, male_worms){
 
 
 
+#' Get all entries of a chosen variable from the Julia humans array.
+#'
+#' @param humans Julia array containing information about human population
+#' @param name name of variable we want to return. Must match exactly a name of a variable e.g. "age", "eggs", "female_worms", "male_worms"
+#'
+#' @return Will return an r array
+#' @export
+get_selected_data <- function(humans, name){
+  julia_code = paste("function get_selected_data(humans)
+                        x = (p->p.", name, ").(humans)
+                        return x
+                        end", sep = "")
+  x = JuliaCall::julia_eval(julia_code)
+  y = x(humans)
+  g = array(0,dim = c(length(y), length(y[1])))
+  for(i in 1:length(y)){
+    g[i,] = y[i]
+  }
+  return(g)
+}
 
 
 

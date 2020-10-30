@@ -139,24 +139,25 @@ humans = update_contact_rate(humans,  pars)
 
 mda_info = array(0,dim=c(0,0))
 vaccine_info = array(0,dim=c(0,0))
-number_years_equ = 250
+number_years_equ = 100
 num_time_steps = as.integer(365*number_years_equ / time_step)
 num_repeats = 1
 
 
 
 e = update_env_constant_population_human_larvae(num_time_steps, humans,  e$miracidia, e$cercariae, pars, mda_info, vaccine_info)
-x = get_data_from_record(e$record)
+d = get_data_from_record(e$record)
 
-sac_burden = x[[1]]
-sac_heavy_burden = x[[2]]
-times = x[[3]]
+sac_burden = d[[1]]
+sac_heavy_burden = d[[2]]
+times = d[[3]]
 
 
 
 
 
 ```
+
 ``` {r plot, echo = FALSE , fig.dim = c(8, 6)}
 plot(times, sac_burden, type = 'l', col = rgb(110/255, 99/255, 252/255), bty = 'n',
      ylim = c(0, max(sac_burden)), lwd = 2, xlab = "year", ylab = "SAC prevalence")
