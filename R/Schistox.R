@@ -370,7 +370,7 @@ update_parameters <- function(pars, contact_rate, max_fecundity, predis_aggregat
 #' update a specific parameter
 #'
 #' @param pars the parameters object
-#' @param name the name of the parameter. This must match the name of a parameter defined in the set_pars function and be input surrounded by "".
+#' @param name the name of the parameter. This must match the name of a parameter defined in the set_pars function and be input as a string.
 #' @param value the value to update the parameter to
 #'
 #' @export
