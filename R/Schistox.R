@@ -460,7 +460,7 @@ update_env_constant_population_increasing<- function(num_time_steps, humans,  mi
 #' @param vaccine_info  vaccinations to enact
 #'
 #' @export
-update_env_constant_population_human_larvae<- function(num_time_steps, humans,  miracidia, cercariae, pars, mda_info, vaccine_info){
+update_env_constant_population_human_larvae <- function(num_time_steps, humans,  miracidia, cercariae, pars, mda_info, vaccine_info){
   JuliaCall::julia_assign("num_time_steps",num_time_steps)
   JuliaCall::julia_assign("humans", humans)
   JuliaCall::julia_assign("miracidia", miracidia)

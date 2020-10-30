@@ -9,7 +9,7 @@ update_parameters_individually(pars, name, value)
 \arguments{
 \item{pars}{the parameters object}
 
-\item{name}{the name of the parameter. This must match the name of a parameter defined in the set_pars function and be input surrounded by "".}
+\item{name}{the name of the parameter. This must match the name of a parameter defined in the set_pars function and be input as a string.}
 
 \item{value}{the value to update the parameter to}
 }

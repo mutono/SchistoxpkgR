@@ -145,20 +145,18 @@ num_repeats = 1
 
 
 
-e = update_env_constant_population(num_time_steps, humans,  e$miracidia, e$cercariae, pars, mda_info, vaccine_info)
+e = update_env_constant_population_human_larvae(num_time_steps, humans,  e$miracidia, e$cercariae, pars, mda_info, vaccine_info)
 x = get_data_from_record(e$record)
 
 sac_burden = x[[1]]
 sac_heavy_burden = x[[2]]
 times = x[[3]]
 
-filename = "population.jld"
-save_population_to_file(filename, e$humans,  e$miracidia, e$cercariae, pars)
+
 
 
 
 ```
-
 ``` {r plot, echo = FALSE , fig.dim = c(8, 6)}
 plot(times, sac_burden, type = 'l', col = rgb(110/255, 99/255, 252/255), bty = 'n',
      ylim = c(0, max(sac_burden)), lwd = 2, xlab = "year", ylab = "SAC prevalence")
@@ -169,6 +167,13 @@ legend('topright',legend=c("SAC prev", "SAC heavy burden"),
        col=c(rgb(110/255, 99/255, 252/255), rgb(30/255, 190/255, 160/255)), lwd = c(2,2), lty = c(1,1), cex=1.2,
        title="", text.font=18, bg='lightblue', bty = 'n')
 ```
+
+We can save the resulting population as follows:
+```{r, eval = FALSE}
+filename = "population.jld"
+save_population_to_file(filename, e$humans,  e$miracidia, e$cercariae, pars)
+```
+
 # Consider effect of MDA
 We can then investigate the use of MDA's in reducing the prevalence of schistosomiasis in the population. The MDA performed here is 75% coverage in SAC once a year and is defined in the ```create_mda``` function (run ```?create_mda``` for docs):
 ```{r mda}
@@ -182,7 +187,7 @@ mda_info = create_mda(0, .75, 0, 1,
 
 
 
-e1 =  run_repeated_sims_no_population_change(filename, num_time_steps, mda_info, vaccine_info, num_repeats)
+e1 =  run_repeated_sims_no_population_change_human_larvae(filename, num_time_steps, mda_info, vaccine_info, num_repeats)
 
 
 

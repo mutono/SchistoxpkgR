@@ -2,7 +2,7 @@
 % Please edit documentation in R/Schistox.R
 \name{update_env_constant_population_increasing}
 \alias{update_env_constant_population_increasing}
-\title{Run the simulation of the population where we include births and deaths with each of these specified by their rates}
+\title{Run the simulation of the population where we include births and deaths but each death is matched by one birth. Here the egg_production function is monotonically increasing}
 \usage{
 update_env_constant_population_increasing(
   num_time_steps,
@@ -30,5 +30,5 @@ update_env_constant_population_increasing(
 \item{vaccine_info}{vaccinations to enact}
 }
 \description{
-Run the simulation of the population where we include births and deaths with each of these specified by their rates
+Run the simulation of the population where we include births and deaths but each death is matched by one birth. Here the egg_production function is monotonically increasing
 }
