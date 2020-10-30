@@ -2,7 +2,7 @@
 title: "Run to equilibrium and investigate a school age children mda program"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{equ_mda_run}
+  %\VignetteIndexEntry{Run to equilibrium and investigate a school age children mda program}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -22,6 +22,8 @@ After this, we will need to setup the environment to use Julia and load the requ
 ```{r setup2}
 schistox_setup()
 ```
+
+# Define and initialize parameters
 As we have many parameters, we will then need to define these so that we can run simulations. As these are passed to Julia to run, some parameters require special formatting, such as population size must be passed ```as.integer(N)```. Below we define all parameters required and initialize the ```Parameters``` object needed to run the code. Definitions of the parameters can be found by running ```?set_pars```.
 ```{r define_params}
 N = as.integer(1000)    
@@ -126,8 +128,10 @@ pars = set_pars(N,
                 input_contact_rates, scenario)
 
 ```
+
+# Generate population and simulate to equilibrium
 Once we have defined the parameters, we can create the population and begin running simulations. We must define mda and vaccine information here. If we wish to perform no MDA or vaccinations then we add these as ```mda_info = array(0,dim=c(0,0)); vaccine_info = array(0,dim=c(0,0))``` as seen below.:
-```{r create_population, fig.dim = c(8, 6)}
+```{r create_population}
 e = create_population_specified_ages(pars)
 humans = generate_ages_and_deaths(20000, e$humans, pars)
 humans = update_contact_rate(humans,  pars)
@@ -153,7 +157,9 @@ save_population_to_file(filename, e$humans,  e$miracidia, e$cercariae, pars)
 
 
 
+```
 
+``` {r plot, echo = FALSE , fig.dim = c(8, 6)}
 plot(times, sac_burden, type = 'l', col = rgb(110/255, 99/255, 252/255), bty = 'n',
      ylim = c(0, max(sac_burden)), lwd = 2, xlab = "year", ylab = "SAC prevalence")
 lines(times, sac_heavy_burden, col = rgb(30/255, 190/255, 160/255), lwd =2 )
@@ -163,9 +169,9 @@ legend('topright',legend=c("SAC prev", "SAC heavy burden"),
        col=c(rgb(110/255, 99/255, 252/255), rgb(30/255, 190/255, 160/255)), lwd = c(2,2), lty = c(1,1), cex=1.2,
        title="", text.font=18, bg='lightblue', bty = 'n')
 ```
-
+# Consider effect of MDA
 We can then investigate the use of MDA's in reducing the prevalence of schistosomiasis in the population. The MDA performed here is 75% coverage in SAC once a year and is defined in the ```create_mda``` function (run ```?create_mda``` for docs):
-```{r mda, fig.dim = c(8, 6)}
+```{r mda}
 num_repeats = 10 #number of simulations to run
 number_years = 20
 drug_efficacy = 0.863 #Toor et al. JID paper in SI: drug efficacy 86.3% for S. mansoni and 94% for S. haematobium
@@ -176,15 +182,17 @@ mda_info = create_mda(0, .75, 0, 1,
 
 
 
-e =  run_repeated_sims_no_population_change(filename, num_time_steps, mda_info, vaccine_info, num_repeats)
+e1 =  run_repeated_sims_no_population_change(filename, num_time_steps, mda_info, vaccine_info, num_repeats)
 
 
 
 
+```
 
-plot(e$times, get_dot_mean(e$sac_prev), type = 'l', col = rgb(110/255, 99/255, 252/255), bty = 'n',
-     ylim = c(0,  max(get_dot_mean(e$sac_prev))), lwd = 2, xlab = "year", ylab = "SAC prevalence")
-lines(e$times, get_dot_mean(e$high_burden_sac), col = rgb(30/255, 190/255, 160/255), lwd =2 )
+```{r, echo = FALSE, fig.dim = c(8, 6)}
+plot(e1$times, get_dot_mean(e1$sac_prev), type = 'l', col = rgb(110/255, 99/255, 252/255), bty = 'n',
+     ylim = c(0,  max(get_dot_mean(e1$sac_prev))), lwd = 2, xlab = "year", ylab = "SAC prevalence")
+lines(e1$times, get_dot_mean(e1$high_burden_sac), col = rgb(30/255, 190/255, 160/255), lwd =2 )
 abline(h = 1, lwd = 2, lty = 2, col = rgb(2/255, 163/255, 217/255))
 abline(v=c(0,5,10,15,20), col = 'lightgrey')
 abline(h=c(0,10,20, 30,40,50,60,70,80,90), col = 'lightgrey')
@@ -196,3 +204,31 @@ legend('topright',legend=c("SAC prev", "SAC heavy burden",
        title="", text.font=18, bg='lightblue', bty = 'n')
 
 ```
+
+# Run individual functions
+
+We may wish to run some of these functions in isolation, for example to perform an MDA on the population once time and then run the simulation forward again, or to change the parameters of the simulation and then continue a simulation.
+
+To perform an MDA of 80% of the population we can run:
+```{r individual_mda}
+humans = administer_drug(e$humans, indices = sample(1:N, N * .8), drug_effectiveness = 0.863)
+```
+Note that to perform a more sophisticated MDA we must input the indices of the MDA more carefully.
+
+We can also update the contact rate by age in the following way:
+```{r update_contact_rate_by_age}
+input_ages = array(data = c(as.integer(4),as.integer(9),as.integer(15), as.integer(max_age)))
+input_contact_rates = array(data = c(0.05,	0.25,	0.62,	0.1))
+input_contact_rates = input_contact_rates/sum(input_contact_rates)
+pars = make_age_contact_rate_array(pars, scenario, input_ages, input_contact_rates)
+```
+```input_ages``` specifies the age groups which we are specifying the contact rates for. ```input_contact_rate``` are the chosen contact rates for the age groups specified. Having a 4 in the in the first position means that individuals from the ages of 0 to 4 will have the contact rate given by the first entry in ```input_contact_rate```. From 5 to the next specified age, individuals in this age range will have the 2nd specified contact rate and so on. Here the contact rates are normalized so that the sum of the contact rate array is 1, though this isn't necessary. The 4th line here is where the contact rates are actually updated in the parameters object.
+
+
+
+
+
+
+
+
+

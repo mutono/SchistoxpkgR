@@ -367,6 +367,19 @@ update_parameters <- function(pars, contact_rate, max_fecundity, predis_aggregat
 
 }
 
+#' update a specific parameter
+#'
+#' @param pars the parameters object
+#' @param name the name of the parameter. This must match the name of a parameter defined in the set_pars function and be input surrounded by "".
+#' @param value the value to update the parameter to
+#'
+#' @export
+update_parameters_individually <- function(pars, name, value){
+
+  JuliaCall::julia_assign(name, value)
+  julia_code = paste("pars.", name, " = ", name, sep = "")
+  x = JuliaCall::julia_eval(julia_code)
+}
 
 
 
