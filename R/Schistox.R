@@ -18,6 +18,10 @@
 #' @export
 schistox_setup <- function (...){
   julia <- JuliaCall::julia_setup(...)
+  JuliaCall::julia_install_package_if_needed("Distributions")
+  JuliaCall::julia_install_package_if_needed("Random")
+  JuliaCall::julia_install_package_if_needed("JLD")
+  JuliaCall::julia_install_package_if_needed("Schistoxpkg")
   JuliaCall::julia_library("Distributions")
   JuliaCall::julia_library("Random")
   JuliaCall::julia_library("JLD")
