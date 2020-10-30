@@ -420,7 +420,7 @@ update_env_constant_population<- function(num_time_steps, humans,  miracidia, ce
 
 
 
-#' Run the simulation of the population where we include births and deaths with each of these specified by their rates
+#' Run the simulation of the population where we include births and deaths but each death is matched by one birth. Here the egg_production function is monotonically increasing
 #'
 #' @param num_time_steps  how many time steps to run forward for
 #' @param humans  human population
@@ -445,6 +445,36 @@ update_env_constant_population_increasing<- function(num_time_steps, humans,  mi
   env = list("humans" = x[[1]], "miracidia" = x[[2]], "cercariae" = x[[3]], "record" = x[[4]])
   return(env)
 }
+
+
+
+#' Run the simulation of the population where we include births and deaths, but each death is matched by one birth.
+#' Here cercariae are picked up as larvae within humans, rather than immediately becoming worms.
+#'
+#' @param num_time_steps  how many time steps to run forward for
+#' @param humans  human population
+#' @param miracidia  environmental miracidia
+#' @param cercariae  environmental cercariae
+#' @param pars  parameters
+#' @param mda_info  mda's to enact
+#' @param vaccine_info  vaccinations to enact
+#'
+#' @export
+update_env_constant_population_human_larvae<- function(num_time_steps, humans,  miracidia, cercariae, pars, mda_info, vaccine_info){
+  JuliaCall::julia_assign("num_time_steps",num_time_steps)
+  JuliaCall::julia_assign("humans", humans)
+  JuliaCall::julia_assign("miracidia", miracidia)
+  JuliaCall::julia_assign("cercariae", cercariae)
+  JuliaCall::julia_assign("pars", pars)
+  JuliaCall::julia_assign("mda_info", mda_info)
+  JuliaCall::julia_assign("vaccine_info", vaccine_info)
+
+
+  x = JuliaCall::julia_eval("update_env_constant_population_human_larvae(num_time_steps, humans,  miracidia, cercariae, pars, mda_info, vaccine_info)")
+  env = list("humans" = x[[1]], "miracidia" = x[[2]], "cercariae" = x[[3]], "record" = x[[4]])
+  return(env)
+}
+
 
 
 #' Update the contact rates for individuals when they age
@@ -516,6 +546,32 @@ run_repeated_sims_no_population_change<- function(filename, num_time_steps, mda_
 
   x =
     JuliaCall::julia_eval("run_repeated_sims_no_population_change(filename, num_time_steps, mda_info, vaccine_info, num_repeats)")
+
+
+  env = list("times" = x[[1]], "prev" = x[[2]], "sac_prev" = x[[3]], "high_burden" = x[[4]],
+             "high_burden_sac" = x[[5]], "adult_prev" = x[[6]], "high_adult_burden" = x[[7]])
+
+  return(env)
+}
+
+
+#' run simulations where the population doesn't change. Larvae are uptaken to larvae within humans.
+#'
+#' @param filename name of file to store population in
+#' @param num_time_steps how many time steps to step forward
+#' @param mda_info container for all MDAs to take place
+#' @param vaccine_info container for all vaccination programs to take place
+#' @param num_repeats how many times do we repeat the simulation
+#' @export
+run_repeated_sims_no_population_change_human_larvae <- function(filename, num_time_steps, mda_info, vaccine_info, num_repeats){
+  JuliaCall::julia_assign("filename", filename)
+  JuliaCall::julia_assign("num_time_steps", num_time_steps)
+  JuliaCall::julia_assign("mda_info", mda_info)
+  JuliaCall::julia_assign("vaccine_info", vaccine_info)
+  JuliaCall::julia_assign("num_repeats", num_repeats)
+
+  x =
+    JuliaCall::julia_eval("run_repeated_sims_no_population_change_human_larvae(filename, num_time_steps, mda_info, vaccine_info, num_repeats)")
 
 
   env = list("times" = x[[1]], "prev" = x[[2]], "sac_prev" = x[[3]], "high_burden" = x[[4]],
