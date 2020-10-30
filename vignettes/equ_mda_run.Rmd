@@ -169,7 +169,7 @@ legend('topright',legend=c("SAC prev", "SAC heavy burden"),
 ```
 
 We can save the resulting population as follows:
-```{r, eval = FALSE}
+```{r save_pop}
 filename = "population.jld"
 save_population_to_file(filename, e$humans,  e$miracidia, e$cercariae, pars)
 ```
