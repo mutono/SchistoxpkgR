@@ -219,7 +219,7 @@ To perform an MDA of 80% of the population we can run:
 ```{r individual_mda}
 humans = administer_drug(e$humans, indices = sample(1:N, N * .8), drug_effectiveness = 0.863)
 ```
-Note that to perform a more sophisticated MDA we must input the indices of the MDA more carefully.
+Note that to perform a more sophisticated MDA we must input the indices of the MDA more carefully, for example finding all individuals whose age is in a certain range first, and then specifying the proportion who will receive MDA.
 
 We can also update the contact rate by age in the following way:
 ```{r update_contact_rate_by_age}
@@ -237,7 +237,14 @@ update_parameters_individually(pars, name = "max_fecundity", value = 0.32)
 where the ```name``` input must exactly match a parameter name in the ```Parameter``` variable and ```value``` is the updated parameter value. This can be used to update the global contact rate, which could be used if we wanted to simulate a WASH intervention or the building or upgrading of latrines.
 
 
+To return every entry of a chosen variable from the array containing the human population data, which is a Julia array, we run the following:
+```{r return_variable}
+eggs = get_selected_data(humans, "eggs")
+ages = get_selected_data(humans, "age")
+female_worms = get_selected_data(humans, "female_worms")
+male_worms = get_selected_data(humans, "male_worms")
+```
 
-
-
+The 2nd input in this function must be exactly the name of a variable in the humans object. Options for this are:
+```"age", "death_age", "gender", "predisposition", "female_worms", "male_worms", "eggs", "vac_status", "age_contact_rate", "adherence", "access", "community", "relative_contact_rate", "uptake_rate", "acquired_immunity", "total_worms", "larvae"```.
 
