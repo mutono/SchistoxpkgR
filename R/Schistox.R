@@ -4,14 +4,14 @@
 #' Setup Schistoxpkg
 #'
 #' This function initializes Julia and the Schistoxpkg.jl package
-#' The first time will be long since it includes precompilation.
+#' The first time will be long since it includes precompilation
 #'
 #' @param ... Parameters are passed down to JuliaCall::julia_setup
 #'
 #' @examples
 #'
 #' \donttest{
-#' ## schistox_setup() is time-consuming and requires Julia.
+#' ## schistox_setup() is time-consuming and requires Julia
 #'
 #' }
 #'
@@ -42,7 +42,7 @@ default_pars <- function(){
 
 
 
-#' Save humans, environmental cercariae and mircacidia to a file along with the parameters used.
+#' Save humans, environmental cercariae and mircacidia to a file along with the parameters used
 #'
 #' @param filename  file to save to
 #' @param humans  humans variable
@@ -498,8 +498,8 @@ update_contact_rate <- function(humans, pars){
 #' @param pre_SAC_prop  proportion of pre-SAC individuals to recieve MDA
 #' @param SAC_prop  proportion of SAC individuals to recieve MDA
 #' @param adult_prop  proportion of adults individuals to recieve MDA
-#' @param first_mda_time  specifies when this will first occur in years,
-#' @param last_mda_time  specifies when this will last occur in years,
+#' @param first_mda_time  specifies when this will first occur in years
+#' @param last_mda_time  specifies when this will last occur in years
 #' @param regularity  how regularly the mda will repeat in years
 #' @param pre_SAC_gender  gender of pre-SAC individuals to recieve MDA
 #' @param SAC_gender  gender of SAC individuals to recieve MDA
@@ -691,7 +691,7 @@ calculate_worm_pairs <- function(female_worms, male_worms){
 
 
 
-#' Get all entries of a chosen variable from the Julia humans array.
+#' Get all entries of a chosen variable from the Julia humans array
 #'
 #' @param humans Julia array containing information about human population
 #' @param name name of variable we want to return. Must match exactly a name of a variable e.g. "age", "eggs", "female_worms", "male_worms"

@@ -24,9 +24,9 @@ create_mda(
 
 \item{adult_prop}{proportion of adults individuals to recieve MDA}
 
-\item{first_mda_time}{specifies when this will first occur in years,}
+\item{first_mda_time}{specifies when this will first occur in years}
 
-\item{last_mda_time}{specifies when this will last occur in years,}
+\item{last_mda_time}{specifies when this will last occur in years}
 
 \item{regularity}{how regularly the mda will repeat in years}
 
