@@ -62,8 +62,9 @@ predis_aggregation = 0.24 # 0.24 for high prev settings; 0.04 for low prev setti
 #The importance of collecting adult data to inform treatment strategies for Schistosoma mansoni"
 cercariae_survival = 1/2
 miracidia_survival = 1/2
-death_prob_by_age = c(0.0656, 0.0093, 0.003, 0.0023, 0.0027, 0.0038, 0.0044, 0.0048, 0.0053,
-                      0.0065, 0.0088, 0.0106, 0.0144, 0.021, 0.0333, 0.0529, 0.0851, 0.1366, 0.2183, 0.2998 , 0.3698, 1)
+death_prob_by_age = c(0.0656, 0.0093, 0.003, 0.0023, 0.0027, 0.0038, 0.0044, 0.0048, 
+                      0.0053, 0.0065, 0.0088, 0.0106, 0.0144, 0.021, 0.0333, 0.0529, 
+                      0.0851, 0.1366, 0.2183, 0.2998 , 0.3698, 1)
 ages_for_death = c(1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60,
                    65, 70, 75, 80, 85, 90, 95, 100, 110)
 r = 0.03
@@ -82,6 +83,7 @@ human_larvae_maturity_time = 30
 input_ages = array(0,dim=c(0))
 input_contact_rates = array(0,dim=c(0))
 scenario = "moderate adult"
+
 pars = set_pars(N,
                 time_step,
                 N_communities,
@@ -125,7 +127,8 @@ pars = set_pars(N,
                 M0,
                 human_larvae_maturity_time,
                 input_ages, 
-                input_contact_rates, scenario)
+                input_contact_rates, 
+                scenario)
 
 ```
 
@@ -151,11 +154,6 @@ d = get_data_from_record(e$record)
 sac_burden = d[[1]]
 sac_heavy_burden = d[[2]]
 times = d[[3]]
-
-
-
-
-
 ```
 
 ``` {r plot, echo = FALSE , fig.dim = c(8, 6)}
