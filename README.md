@@ -4,7 +4,7 @@ This library is a wrapper for the Julia package Schistoxpkg (https://github.com/
 
 ## Installation
 
-This package uses JuliaCall in R in order to run the Julia package. If you are using Ubuntu or Debian, then it is likely that JuliaCall will not work correctly as described here: https://github.com/Non-Contradiction/JuliaCall/pull/143. There is a workaround for this problem described here: https://github.com/Non-Contradiction/JuliaCall/issues/99.
+This package uses JuliaCall in R in order to run the Julia package. If you are using Ubuntu or Debian, then it is likely that JuliaCall will not work correctly as described here: https://github.com/Non-Contradiction/JuliaCall/issues/99. There is a workaround for this problem described here: https://github.com/Non-Contradiction/JuliaCall/pull/143.
 
 To install the master branch of the package you need to have devtools installed. If this isn't installed, then install it with:
 ```R
