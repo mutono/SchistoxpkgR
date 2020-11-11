@@ -10,7 +10,7 @@ parameter_value(pars, name)
 \item{pars}{the parameter object currently in use}
 
 \item{name}{name of variable we want to return.
-Must match exactly a name of a variable in parameters e.g. "contact_rate", "N" etc. Set ?set_pars for list of names}
+Must match exactly a name of a variable in parameters e.g. "contact_rate", "N" etc. See ?set_pars for list of names}
 }
 \value{
 
