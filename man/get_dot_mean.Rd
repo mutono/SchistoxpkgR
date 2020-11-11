@@ -2,7 +2,7 @@
 % Please edit documentation in R/Schistox.R
 \name{get_dot_mean}
 \alias{get_dot_mean}
-\title{Calculate the element wise mean of whatever Julia variable is input}
+\title{Calculate the element wise mean of whatever Julia array is input}
 \usage{
 get_dot_mean(a)
 }
@@ -10,5 +10,5 @@ get_dot_mean(a)
 \item{a}{- input object to take element wise mean of}
 }
 \description{
-Calculate the element wise mean of whatever Julia variable is input
+Calculate the element wise mean of whatever Julia array is input
 }

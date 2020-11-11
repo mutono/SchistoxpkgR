@@ -2,7 +2,7 @@
 % Please edit documentation in R/Schistox.R
 \name{get_selected_data}
 \alias{get_selected_data}
-\title{Get all entries of a chosen variable from the Julia humans array.}
+\title{Get all entries of a chosen variable from the Julia humans array}
 \usage{
 get_selected_data(humans, name)
 }
@@ -15,5 +15,5 @@ get_selected_data(humans, name)
 Will return an r array
 }
 \description{
-Get all entries of a chosen variable from the Julia humans array.
+Get all entries of a chosen variable from the Julia humans array
 }

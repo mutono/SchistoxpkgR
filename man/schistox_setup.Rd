@@ -11,12 +11,12 @@ schistox_setup(...)
 }
 \description{
 This function initializes Julia and the Schistoxpkg.jl package
-The first time will be long since it includes precompilation.
+The first time will be long since it includes precompilation
 }
 \examples{
 
 \donttest{
-## schistox_setup() is time-consuming and requires Julia.
+## schistox_setup() is time-consuming and requires Julia
 
 }
 

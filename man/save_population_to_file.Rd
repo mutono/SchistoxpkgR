@@ -2,7 +2,7 @@
 % Please edit documentation in R/Schistox.R
 \name{save_population_to_file}
 \alias{save_population_to_file}
-\title{Save humans, environmental cercariae and mircacidia to a file along with the parameters used.}
+\title{Save humans, environmental cercariae and mircacidia to a file along with the parameters used}
 \usage{
 save_population_to_file(filename, humans, miracidia, cercariae, pars)
 }
@@ -18,7 +18,7 @@ save_population_to_file(filename, humans, miracidia, cercariae, pars)
 \item{pars}{parameter set}
 }
 \description{
-Save humans, environmental cercariae and mircacidia to a file along with the parameters used.
+Save humans, environmental cercariae and mircacidia to a file along with the parameters used
 }
 \examples{
 \donttest{

@@ -89,7 +89,7 @@ get_data_from_record <- function( record){
 
 
 
-#' Calculate the element wise mean of whatever Julia variable is input
+#' Calculate the element wise mean of whatever Julia array is input
 #'
 #' @param a - input object to take element wise mean of
 #'
@@ -710,6 +710,26 @@ get_selected_data <- function(humans, name){
     g[i,] = y[i]
   }
   return(g)
+}
+
+
+
+#' Get the value of a chosen parameter
+#'
+#' @param pars the parameter object currently in use
+#' @param name name of variable we want to return.
+#' Must match exactly a name of a variable in parameters e.g. "contact_rate", "N" etc. Set ?set_pars for list of names
+#'
+#' @return
+#' @export
+parameter_value <- function(pars, name){
+  julia_code = paste("function parameter_value(pars)
+                        x = pars.", name, "
+                        return x
+                        end", sep = "")
+  x = JuliaCall::julia_eval(julia_code)
+  y = x(pars)
+  return(y)
 }
 
 

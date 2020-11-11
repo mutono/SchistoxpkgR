@@ -159,7 +159,7 @@ times = d[[3]]
 
 
 
-``` {r plot, echo = FALSE , fig.dim = c(8, 6)}
+``` {r plot, fig.dim = c(8, 6)}
 plot(times, sac_burden, type = 'l', col = rgb(110/255, 99/255, 252/255), bty = 'n',
      ylim = c(0, max(sac_burden)), lwd = 2, xlab = "year", ylab = "SAC prevalence")
 lines(times, sac_heavy_burden, col = rgb(30/255, 190/255, 160/255), lwd =2 )
@@ -249,3 +249,9 @@ male_worms = get_selected_data(humans, "male_worms")
 The 2nd input in this function must be exactly the name of a variable in the humans object. Options for this are:
 ```"age", "death_age", "gender", "predisposition", "female_worms", "male_worms", "eggs", "vac_status", "age_contact_rate", "adherence", "access", "community", "relative_contact_rate", "uptake_rate", "acquired_immunity", "total_worms", "larvae"```.
 
+We can also output the current value of a parameter that is stored in the parameter object using the following:
+```{r return_parameter}
+parameter_value(pars, "N")
+parameter_value(pars, "contact_rate")
+parameter_value(pars, "max_fecundity")
+```
