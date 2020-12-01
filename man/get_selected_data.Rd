@@ -9,7 +9,8 @@ get_selected_data(humans, name)
 \arguments{
 \item{humans}{Julia array containing information about human population}
 
-\item{name}{name of variable we want to return. Must match exactly a name of a variable e.g. "age", "eggs", "female_worms", "male_worms"}
+\item{name}{name of variable we want to return.
+Must match exactly a name of a variable e.g. "age", "eggs", "female_worms", "male_worms"}
 }
 \value{
 Will return an r array

@@ -64,21 +64,68 @@ save_population_to_file <- function(filename, humans, miracidia, cercariae, pars
 }
 
 
-#' output information from julia recorded data
+#' output information for burden and heavy-intensity burden in school age children from julia recorded data
 #'
 #' @param record variable which stores the data
 #'
 #' @export
-get_data_from_record <- function( record){
+get_sac_data_from_record <- function( record){
 
   JuliaCall::julia_assign("record", record)
 
   x = JuliaCall::julia_eval("
-    function get_data_from_record(record)
+    function get_sac_data_from_record(record)
     sac_burden = (p->p.sac_burden[1]).(record)
     sac_heavy_burden = (p->p.sac_burden[3]).(record)
     times = (p->p.time).(record);
     return sac_burden, sac_heavy_burden, times
+  end
+")
+
+  return(x(record))
+}
+
+
+
+#' output information for burden and heavy-intensity burden in adults from julia recorded data
+#'
+#' @param record variable which stores the data
+#'
+#' @export
+get_adult_data_from_record <- function( record){
+
+  JuliaCall::julia_assign("record", record)
+
+  x = JuliaCall::julia_eval("
+    function get_adult_data_from_record(record)
+    adult_burden = (p->p.adult_burden[1]).(record)
+    adult_heavy_burden = (p->p.adult_burden[3]).(record)
+    times = (p->p.time).(record);
+    return adult_burden, adult_heavy_burden, times
+  end
+")
+
+  return(x(record))
+}
+
+
+
+
+#' output information for burden and heavy-intensity for whole population from julia recorded data
+#'
+#' @param record variable which stores the data
+#'
+#' @export
+get_pop_data_from_record <- function( record){
+
+  JuliaCall::julia_assign("record", record)
+
+  x = JuliaCall::julia_eval("
+    function get_adult_data_from_record(record)
+    pop_burden = (p->p.population_burden[1]).(record)
+    pop_heavy_burden = (p->p.population_burden[3]).(record)
+    times = (p->p.time).(record);
+    return pop_burden, pop_heavy_burden, times
   end
 ")
 
@@ -167,6 +214,9 @@ get_dot_mean<- function(a){
 #' a proxy for mean worm burden (Float)
 #' @param human_larvae_maturity_time length of time in days after which a cercariae uptaken by
 #' a human will mature into a worm (Int)
+#' @param egg_sample_size the proportion of eggs which are sampled from each individual every time we
+#' check their burden. This is between 0 and 1, with 1 meaning that all the eggs in the person are
+#' sampled, hence giving the true burden. Typical value for a urine sample may be ~ 1/100
 #' @param input_ages input ages for constructing contact array
 #' @param input_contact_rates input rates for constructing contact array
 #' @param scenario can be one of "low adult", "moderate adult", "high adult"
@@ -182,7 +232,7 @@ set_pars <- function(N, time_step, N_communities, community_probs,
                      miracidia_survival, death_prob_by_age, ages_for_death, r,
                      vaccine_effectiveness, drug_effectiveness, spec_ages, ages_per_index,
                      record_frequency, use_kato_katz, kato_katz_par, heavy_burden_threshold,
-                     rate_acquired_immunity, M0, human_larvae_maturity_time, input_ages, input_contact_rates,
+                     rate_acquired_immunity, M0, human_larvae_maturity_time, egg_sample_size, input_ages, input_contact_rates,
                      scenario){
 
   JuliaCall::julia_assign("N", N)
@@ -232,6 +282,7 @@ set_pars <- function(N, time_step, N_communities, community_probs,
   JuliaCall::julia_assign("M0", M0)
 
   JuliaCall::julia_assign("human_larvae_maturity_time", human_larvae_maturity_time)
+  JuliaCall::julia_assign("egg_sample_size", egg_sample_size)
   JuliaCall::julia_assign("scenario", scenario)
 
  pars = JuliaCall::julia_eval("Parameters(N, time_step, N_communities, community_probs, community_contact_rate,
@@ -243,7 +294,7 @@ set_pars <- function(N, time_step, N_communities, community_probs,
              death_prob_by_age, ages_for_death, r, vaccine_effectiveness, drug_effectiveness,
              spec_ages, ages_per_index, record_frequency, use_kato_katz, kato_katz_par, heavy_burden_threshold,
                               rate_acquired_immunity, M0,
-                              human_larvae_maturity_time)")
+                              human_larvae_maturity_time, egg_sample_size)")
 
 
 
@@ -289,13 +340,12 @@ make_age_contact_rate_array <- function(pars, scenario, input_ages, input_contac
   JuliaCall::julia_assign("input_ages", input_ages)
   JuliaCall::julia_assign("input_contact_rates", input_contact_rates)
   #JuliaCall::julia_eval("result = make_age_contact_rate_array")
+  update_parameters_individually(pars, name = "age_contact_rates", value = input_contact_rates)
   result <- JuliaCall::julia_eval("make_age_contact_rate_array(pars, scenario, input_ages, input_contact_rates)")
+
   return(result)
 
 }
-
-
-
 
 
 #' Will age the human population in order to get a realistic age structure based on input death rates by age.
@@ -316,7 +366,6 @@ generate_ages_and_deaths <- function(num_steps, humans, pars){
 }
 
 
-
 #' Create contact by age rates given a scenario
 #'
 #' @param scenario  one of "low adult", "moderate adult" and "high adult"
@@ -326,9 +375,6 @@ create_contact_settings <- function(scenario){
   JuliaCall::julia_assign("scenario", scenario)
   result <- JuliaCall::julia_eval("create_contact_settings(scenario)")
 }
-
-
-
 
 
 #' Create the population to begin from
@@ -370,6 +416,7 @@ update_parameters <- function(pars, contact_rate, max_fecundity, predis_aggregat
 
 
 }
+
 
 #' update a specific parameter
 #'
@@ -486,7 +533,6 @@ update_contact_rate <- function(humans, pars){
 
   JuliaCall::julia_assign("humans", humans)
   JuliaCall::julia_assign("pars", pars)
-
 
   x = JuliaCall::julia_eval("update_contact_rate(humans, pars)")
 
@@ -643,30 +689,6 @@ add_to_mda <- function(mda_info, mda_start_time, last_mda_time,  regularity,
 }
 
 
-return_arrays_from_object <- JuliaCall::julia_eval("
-function return_arrays_from_object(record)
-  times = []
-  prev = []
-  sac_prev = []
-  high_burden = []
-  high_burden_sac = []
-  adult_prev = []
-  high_adult_burden = []
-
-  for i in 1 : length(record)
-    push!(times, record[i].time)
-    push!(prev, record[i].pop_prev)
-    push!(sac_prev, record[i].sac_prev)
-    push!(high_burden, record[i].population_burden[3])
-    push!(high_burden_sac, record[i].sac_burden[3])
-    push!(adult_prev, record[i].adult_prev)
-    push!(high_adult_burden, record[i].adult_burden[3])
-  end
-
-  return times, prev, sac_prev, high_burden, high_burden_sac, adult_prev, high_adult_burden
-end
-")
-
 
 
 
@@ -694,7 +716,8 @@ calculate_worm_pairs <- function(female_worms, male_worms){
 #' Get all entries of a chosen variable from the Julia humans array
 #'
 #' @param humans Julia array containing information about human population
-#' @param name name of variable we want to return. Must match exactly a name of a variable e.g. "age", "eggs", "female_worms", "male_worms"
+#' @param name name of variable we want to return.
+#' Must match exactly a name of a variable e.g. "age", "eggs", "female_worms", "male_worms"
 #'
 #' @return Will return an r array
 #' @export

@@ -77,13 +77,13 @@ record_frequency = 1/24
 use_kato_katz = 0
 kato_katz_par = 0.87
 heavy_burden_threshold = 16
-rate_acquired_immunity = 0
+rate_acquired_immunity = 0.1
 M0 = 20
 human_larvae_maturity_time = 30
 input_ages = array(0,dim=c(0))
 input_contact_rates = array(0,dim=c(0))
 scenario = "moderate adult"
-
+egg_sample_size = 1
 pars = set_pars(N,
                 time_step,
                 N_communities,
@@ -126,6 +126,7 @@ pars = set_pars(N,
                 rate_acquired_immunity,
                 M0,
                 human_larvae_maturity_time,
+                egg_sample_size,
                 input_ages, 
                 input_contact_rates, 
                 scenario)
@@ -144,12 +145,11 @@ mda_info = array(0,dim=c(0,0))
 vaccine_info = array(0,dim=c(0,0))
 number_years_equ = 100
 num_time_steps = as.integer(365*number_years_equ / time_step)
-num_repeats = 1
 
 
 
 e = update_env_constant_population_human_larvae(num_time_steps, humans,  e$miracidia, e$cercariae, pars, mda_info, vaccine_info)
-d = get_data_from_record(e$record)
+d = get_sac_data_from_record(e$record)
 
 sac_burden = d[[1]]
 sac_heavy_burden = d[[2]]
@@ -233,7 +233,7 @@ pars = make_age_contact_rate_array(pars, scenario, input_ages, input_contact_rat
 
 We can also update individual parameters of the simulation using the ```update_parameters_individually``` function. This is used as follows:
 ```{r update_pars}
-update_parameters_individually(pars, name = "max_fecundity", value = 0.32)
+update_parameters_individually(pars, name = "max_fecundity", value = 123123132)
 ```
 where the ```name``` input must exactly match a parameter name in the ```Parameter``` variable and ```value``` is the updated parameter value. This can be used to update the global contact rate, which could be used if we wanted to simulate a WASH intervention or the building or upgrading of latrines.
 
