@@ -1,6 +1,6 @@
 # SchistoxpkgR
 
-This library is a wrapper for the Julia package Schistoxpkg (https://github.com/mattg3004/Schistoxpkg.jl).
+This R library is a wrapper for the Julia package Schistoxpkg (https://github.com/mattg3004/Schistoxpkg.jl).
 
 ## Installation
 
