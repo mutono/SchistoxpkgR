@@ -80,8 +80,8 @@ heavy_burden_threshold = 16
 rate_acquired_immunity = 0.1
 M0 = 20
 human_larvae_maturity_time = 30
-input_ages = array(0,dim=c(0))
-input_contact_rates = array(0,dim=c(0))
+input_ages = c(4, 9, 15, 100)
+input_contact_rates = c(0.032, 0.610, 1, 0.06)
 scenario = "moderate adult"
 egg_sample_size = 1
 

@@ -285,7 +285,7 @@ set_pars <- function(N, time_step, N_communities, community_probs,
   JuliaCall::julia_assign("egg_sample_size", egg_sample_size)
   JuliaCall::julia_assign("scenario", scenario)
 
- pars = JuliaCall::julia_eval(" Parameters(N, time_step, N_communities, community_probs, community_contact_rate,
+ pars = JuliaCall::julia_eval("Parameters(N, time_step, N_communities, community_probs, community_contact_rate,
         density_dependent_fecundity, average_worm_lifespan,
         max_age, initial_worms, initial_miracidia, initial_miracidia_days, init_env_cercariae,
         worm_stages, contact_rate, max_fecundity, age_contact_rates,
@@ -431,6 +431,27 @@ update_parameters_individually <- function(pars, name, value){
   x = JuliaCall::julia_eval(julia_code)
 }
 
+
+
+#' Update a number of specified parameters at the same time
+#'
+#' @param pars the parameters object
+#' @param ... list of parameters and values for chosen parameters. Must be paired, for example, to update parameter N to 500 and max_fecunidty to 4
+#' the function entry must look like: update_specified_parameters(pars, "N", 500, "max_fecundity", 4)
+#'
+#'
+#' @export
+#'
+update_specified_parameters <- function(pars, ...){
+
+  for(i in seq(1,(nargs()-1),2)){
+    name = list(...)[[i]]
+    value = list(...)[[(i+1)]]
+    JuliaCall::julia_assign(name, value)
+    julia_code = paste("pars.", name, " = ", name, sep = "")
+    x = JuliaCall::julia_eval(julia_code)
+  }
+}
 
 
 
