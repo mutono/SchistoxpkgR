@@ -202,7 +202,8 @@ pars = make_age_contact_rate_array(pars, scenario, input_ages, input_contact_rat
 We can also update individual parameters of the simulation using the ```update_parameters_individually``` function. Or we can update multiple parameters at once using the ```update_specified_parameters``` function. These are used as follows:
 ```{r update_pars}
 update_parameters_individually(pars, name = "max_fecundity", value = 5)
-update_specified_parameters(pars, "N", 500, "max_fecundity", 4, "time_step", 20, "egg_sample_size", 0.01)
+update_specified_parameters(pars, "N", 500, "max_fecundity", 4, 
+                            "time_step", 20, "egg_sample_size", 0.01)
 ```
 where the ```name``` input must exactly match a parameter name in the ```Parameter``` variable and ```value``` is the updated parameter value. This can be used to update the global contact rate, which could be used if we wanted to simulate a WASH intervention or the building or upgrading of latrines.
 
