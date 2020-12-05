@@ -18,10 +18,10 @@
 #' @export
 schistox_setup <- function (...){
   julia <- JuliaCall::julia_setup(...)
-  JuliaCall::julia_install_package_if_needed("Distributions")
-  JuliaCall::julia_install_package_if_needed("Random")
-  JuliaCall::julia_install_package_if_needed("JLD")
-  JuliaCall::julia_install_package_if_needed("Schistoxpkg")
+  # JuliaCall::julia_install_package_if_needed("Distributions")
+  # JuliaCall::julia_install_package_if_needed("Random")
+  # JuliaCall::julia_install_package_if_needed("JLD")
+  # JuliaCall::julia_install_package_if_needed("Schistoxpkg")
   JuliaCall::julia_library("Distributions")
   JuliaCall::julia_library("Random")
   JuliaCall::julia_library("JLD")
@@ -436,8 +436,9 @@ update_parameters_individually <- function(pars, name, value){
 #' Update a number of specified parameters at the same time
 #'
 #' @param pars the parameters object
-#' @param ... list of parameters and values for chosen parameters. Must be paired, for example, to update parameter N to 500 and max_fecunidty to 4
-#' the function entry must look like: update_specified_parameters(pars, "N", 500, "max_fecundity", 4)
+#' @param ... list of parameters and values for chosen parameters. Must be paired, with the name of the parameter in "" first, followed by the desired valeu.
+#' For example, to update parameter N to 500 and max_fecunidty to 4  the function entry must look
+#' like: update_specified_parameters(pars, "N", 500, "max_fecundity", 4)
 #'
 #'
 #' @export
