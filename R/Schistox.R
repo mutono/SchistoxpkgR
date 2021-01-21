@@ -466,6 +466,9 @@ update_specified_parameters <- function(pars, ...){
 #' @param mda_info  mda's to enact
 #' @param vaccine_info  vaccinations to enact
 #'
+#' @return A list variable is returned containing the humans array, miracidia, cercariae and the record of statistics
+#' over the course of the run to equilibrium. To access the humans array, if we output from this function to a variable
+#' env, then by running env$humans, we will return the humans array.
 #' @export
 update_env_constant_population<- function(num_time_steps, humans,  miracidia, cercariae, pars, mda_info, vaccine_info){
   JuliaCall::julia_assign("num_time_steps",num_time_steps)
@@ -498,6 +501,10 @@ update_env_constant_population<- function(num_time_steps, humans,  miracidia, ce
 #' @param mda_info  mda's to enact
 #' @param vaccine_info  vaccinations to enact
 #'
+#' @return A list variable is returned containing the humans array, miracidia, cercariae and the record of statistics
+#' over the course of the run to equilibrium. To access the humans array, if we output from this function to a variable
+#' env, then by running env$humans, we will return the humans array.
+#'
 #' @export
 update_env_constant_population_increasing<- function(num_time_steps, humans,  miracidia, cercariae, pars, mda_info, vaccine_info){
   JuliaCall::julia_assign("num_time_steps",num_time_steps)
@@ -527,7 +534,11 @@ update_env_constant_population_increasing<- function(num_time_steps, humans,  mi
 #' @param mda_info  mda's to enact
 #' @param vaccine_info  vaccinations to enact
 #'
+#' @return A list variable is returned containing the humans array, miracidia, cercariae and the record of statistics
+#' over the course of the run to equilibrium. To access the humans array, if we output from this function to a variable
+#' env, then by running env$humans, we will return the humans array.
 #' @export
+#'
 update_env_constant_population_human_larvae <- function(num_time_steps, humans,  miracidia, cercariae, pars, mda_info, vaccine_info){
   JuliaCall::julia_assign("num_time_steps",num_time_steps)
   JuliaCall::julia_assign("humans", humans)

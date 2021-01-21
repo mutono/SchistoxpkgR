@@ -9,8 +9,9 @@ update_specified_parameters(pars, ...)
 \arguments{
 \item{pars}{the parameters object}
 
-\item{...}{list of parameters and values for chosen parameters. Must be paired, for example, to update parameter N to 500 and max_fecunidty to 4
-the function entry must look like: update_specified_parameters(pars, "N", 500, "max_fecundity", 4)}
+\item{...}{list of parameters and values for chosen parameters. Must be paired, with the name of the parameter in "" first, followed by the desired valeu.
+For example, to update parameter N to 500 and max_fecunidty to 4  the function entry must look
+like: update_specified_parameters(pars, "N", 500, "max_fecundity", 4)}
 }
 \description{
 Update a number of specified parameters at the same time

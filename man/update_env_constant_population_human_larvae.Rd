@@ -30,6 +30,11 @@ update_env_constant_population_human_larvae(
 
 \item{vaccine_info}{vaccinations to enact}
 }
+\value{
+A list variable is returned containing the humans array, miracidia, cercariae and the record of statistics
+over the course of the run to equilibrium. To access the humans array, if we output from this function to a variable
+env, then by running env$humans, we will return the humans array.
+}
 \description{
 Run the simulation of the population where we include births and deaths, but each death is matched by one birth.
 Here cercariae are picked up as larvae within humans, rather than immediately becoming worms.
