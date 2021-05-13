@@ -26,7 +26,7 @@ schistox_setup()
 # Define and initialize parameters
 As we have many parameters, we will then need to define these so that we can run simulations. As these are passed to Julia to run, some parameters require special formatting, such as population size must be passed ```as.integer(N)```. Below we define all parameters required and initialize the ```Parameters``` object needed to run the code. Definitions of the parameters can be found by running ```?set_pars```.
 ```{r define_params}
-N = as.integer(1000)    
+N = as.integer(2000)    
 time_step = 10
 N_communities = 1
 community_probs = JuliaCall::julia_eval("[1.0]", need_return =  "Julia")
@@ -44,23 +44,23 @@ initial_miracidia = 100000*N/1000
 initial_miracidia_days = round(miracidia_maturity/time_step)
 init_env_cercariae = 100000*N/1000
 worm_stages = as.integer(1)
-contact_rate = 0.1
-max_fec_contact_rate_product = 1/15
-max_fecundity = 0.34  # for S. mansoni [Toor et al JID paper SI]
+# contact_rate = 0.1
+max_fec_contact_rate_product = 1/20
+max_fecundity = 20
 contact_rate = max_fec_contact_rate_product / max_fecundity
-#max_fecundity = 0.3  # for S. haematobium [Toor et al JID paper SI]
+
 age_contact_rates = c(0.032, 0.610, 1, 0.06)
 ages_for_contacts = c(4, 9, 15, 100)
 contact_rate_by_age_array = rep(0,101)
 
-mda_adherence = .9
-mda_access = .9
+mda_adherence = 1
+mda_access = 1
 female_factor = 1
 male_factor = 1
 birth_rate = 28*time_step/(1000*365)
 human_cercariae_prop = 1
 
-predis_aggregation = 0.24 # 0.24 for high prev settings; 0.04 for low prev settings # From "The design of schistosomiasis monitoring and evaluation programmes:
+predis_aggregation = 0.2 # 0.24 for high prev settings; 0.04 for low prev settings # From "The design of schistosomiasis monitoring and evaluation programmes:
 #The importance of collecting adult data to inform treatment strategies for Schistosoma mansoni"
 cercariae_survival = 1/2
 miracidia_survival = 1/2
@@ -78,20 +78,20 @@ ages_per_index = 5
 record_frequency = 1/24
 use_kato_katz = 0
 kato_katz_par = 0.87
-heavy_burden_threshold = 16
+heavy_burden_threshold = 50
 rate_acquired_immunity = 0
 M0 = 20
 human_larvae_maturity_time = 30
 input_ages = c(4, 9, 15, 100)
 input_contact_rates = c(0.032, 0.610, 1, 0.06)
 scenario = "moderate adult"
-egg_sample_size = 1
+egg_sample_size = 1/100
 
 pars = set_pars(N, time_step, N_communities, community_probs,
                      community_contact_rate, density_dependent_fecundity,
                      average_worm_lifespan, max_age, initial_worms,
                      initial_miracidia, initial_miracidia_days, init_env_cercariae,
-                     worm_stages, contact_rate, max_fecundity, age_contact_rates,
+                     worm_stages, contact_rate,max_fec_contact_rate_product, max_fecundity, age_contact_rates,
                      ages_for_contacts, contact_rate_by_age_array, mda_adherence,
                      mda_access, female_factor, male_factor, miracidia_maturity,
                      birth_rate, human_cercariae_prop, predis_aggregation, cercariae_survival,

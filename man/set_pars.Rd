@@ -19,6 +19,7 @@ set_pars(
   init_env_cercariae,
   worm_stages,
   contact_rate,
+  max_fec_contact_rate_product,
   max_fecundity,
   age_contact_rates,
   ages_for_contacts,
@@ -89,6 +90,11 @@ will have already had in the environment (Int)}
 Gamma distributed death ages, while more than 1 will result in Erlang distribution (Int)}
 
 \item{contact_rate}{global contact rate for the uptake of larvae from the environment (Float)}
+
+\item{max_fec_contact_rate_product}{the product of max fecundity and the contact rate in the population. Setting this
+to a desired value is often a good way to ensure that the epidemic stays within a reasonable range, as when the max fecundity
+increases, if the contact rate doesn't decrease appropriately, then the behaviour of the outbreak can be unrealistically
+difficult to control. Contact rate can then be calculate by dividing this value by max fecundity or vice versa. (Float)}
 
 \item{max_fecundity}{expected number of eggs from a single worm pair. The actual number
 will be chosen from a distribution with this mean (Float)}
