@@ -169,6 +169,10 @@ get_dot_mean<- function(a){
 #' @param worm_stages how many age stages are there for the worms. Having 1 stage will give
 #' Gamma distributed death ages, while more than 1 will result in Erlang distribution (Int)
 #' @param contact_rate global contact rate for the uptake of larvae from the environment (Float)
+#' @param max_fec_contact_rate_product the product of max fecundity and the contact rate in the population. Setting this
+#' to a desired value is often a good way to ensure that the epidemic stays within a reasonable range, as when the max fecundity
+#' increases, if the contact rate doesn't decrease appropriately, then the behaviour of the outbreak can be unrealistically
+#' difficult to control. Contact rate can then be calculate by dividing this value by max fecundity or vice versa. (Float)
 #' @param max_fecundity expected number of eggs from a single worm pair. The actual number
 #' will be chosen from a distribution with this mean (Float)
 #' @param age_contact_rates contact rate for chosen age groups(Array(Float))
@@ -225,7 +229,8 @@ set_pars <- function(N, time_step, N_communities, community_probs,
                      community_contact_rate, density_dependent_fecundity,
                      average_worm_lifespan, max_age, initial_worms,
                      initial_miracidia, initial_miracidia_days, init_env_cercariae,
-                     worm_stages, contact_rate, max_fecundity, age_contact_rates,
+                     worm_stages, contact_rate,max_fec_contact_rate_product,
+                     max_fecundity, age_contact_rates,
                      ages_for_contacts, contact_rate_by_age_array, mda_adherence,
                      mda_access, female_factor, male_factor, miracidia_maturity,
                      birth_rate, human_cercariae_prop, predis_aggregation, cercariae_survival,
@@ -250,6 +255,7 @@ set_pars <- function(N, time_step, N_communities, community_probs,
   JuliaCall::julia_assign("average_worm_lifespan", average_worm_lifespan)
   JuliaCall::julia_assign("worm_stages", worm_stages)
   JuliaCall::julia_assign("contact_rate", contact_rate)
+  JuliaCall::julia_assign("max_fec_contact_rate_product", max_fec_contact_rate_product)
   JuliaCall::julia_assign("max_fecundity", max_fecundity)
   JuliaCall::julia_assign("age_contact_rates", age_contact_rates)
   JuliaCall::julia_assign("ages_for_contacts", ages_for_contacts)
@@ -288,7 +294,7 @@ set_pars <- function(N, time_step, N_communities, community_probs,
  pars = JuliaCall::julia_eval("Parameters(N, time_step, N_communities, community_probs, community_contact_rate,
         density_dependent_fecundity, average_worm_lifespan,
         max_age, initial_worms, initial_miracidia, initial_miracidia_days, init_env_cercariae,
-        worm_stages, contact_rate, max_fecundity, age_contact_rates,
+        worm_stages, contact_rate, max_fec_contact_rate_product, max_fecundity, age_contact_rates,
         ages_for_contacts, contact_rate_by_age_array, mda_adherence, mda_access,  female_factor, male_factor, miracidia_maturity,
         birth_rate, human_cercariae_prop, predis_aggregation, cercariae_survival, miracidia_survival,
         death_prob_by_age, ages_for_death, r, vaccine_effectiveness, drug_effectiveness,
