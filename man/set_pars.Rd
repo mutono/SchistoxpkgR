@@ -49,6 +49,7 @@ set_pars(
   M0,
   human_larvae_maturity_time,
   egg_sample_size,
+  egg_production_distribution,
   input_ages,
   input_contact_rates,
   scenario
@@ -172,6 +173,8 @@ a human will mature into a worm (Int)}
 \item{egg_sample_size}{the proportion of eggs which are sampled from each individual every time we
 check their burden. This is between 0 and 1, with 1 meaning that all the eggs in the person are
 sampled, hence giving the true burden. Typical value for a urine sample may be ~ 1/100}
+
+\item{egg_production_distribution}{the distribution for egg production. Must be either "Poisson" or "NegBin"}
 
 \item{input_ages}{input ages for constructing contact array}
 
