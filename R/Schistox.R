@@ -221,6 +221,7 @@ get_dot_mean<- function(a){
 #' @param egg_sample_size the proportion of eggs which are sampled from each individual every time we
 #' check their burden. This is between 0 and 1, with 1 meaning that all the eggs in the person are
 #' sampled, hence giving the true burden. Typical value for a urine sample may be ~ 1/100
+#' @param egg_production_distribution the distribution for egg production. Must be either "Poisson" or "NegBin"
 #' @param input_ages input ages for constructing contact array
 #' @param input_contact_rates input rates for constructing contact array
 #' @param scenario can be one of "low adult", "moderate adult", "high adult"
@@ -237,7 +238,9 @@ set_pars <- function(N, time_step, N_communities, community_probs,
                      miracidia_survival, death_prob_by_age, ages_for_death, r,
                      vaccine_effectiveness, drug_effectiveness, spec_ages, ages_per_index,
                      record_frequency, use_kato_katz, kato_katz_par, heavy_burden_threshold,
-                     rate_acquired_immunity, M0, human_larvae_maturity_time, egg_sample_size, input_ages, input_contact_rates,
+                     rate_acquired_immunity, M0, human_larvae_maturity_time, egg_sample_size,
+                     egg_production_distribution,
+                     input_ages, input_contact_rates,
                      scenario){
 
   JuliaCall::julia_assign("N", N)
@@ -289,6 +292,8 @@ set_pars <- function(N, time_step, N_communities, community_probs,
 
   JuliaCall::julia_assign("human_larvae_maturity_time", human_larvae_maturity_time)
   JuliaCall::julia_assign("egg_sample_size", egg_sample_size)
+  JuliaCall::julia_assign("egg_production_distribution", egg_production_distribution)
+
   JuliaCall::julia_assign("scenario", scenario)
 
  pars = JuliaCall::julia_eval("Parameters(N, time_step, N_communities, community_probs, community_contact_rate,
@@ -299,7 +304,7 @@ set_pars <- function(N, time_step, N_communities, community_probs,
         birth_rate, human_cercariae_prop, predis_aggregation, cercariae_survival, miracidia_survival,
         death_prob_by_age, ages_for_death, r, vaccine_effectiveness, drug_effectiveness,
         spec_ages, ages_per_index, record_frequency, use_kato_katz, kato_katz_par, heavy_burden_threshold,
-        rate_acquired_immunity, M0, human_larvae_maturity_time, egg_sample_size)")
+        rate_acquired_immunity, M0, human_larvae_maturity_time, egg_sample_size, egg_production_distribution)")
 
 
 
