@@ -26,11 +26,13 @@ schistox_setup()
 # Define and initialize parameters
 As we have many parameters, we will then need to define these so that we can run simulations. As these are passed to Julia to run, some parameters require special formatting, such as population size must be passed ```as.integer(N)```. Below we define all parameters required and initialize the ```Parameters``` object needed to run the code. Definitions of the parameters can be found by running ```?set_pars```.
 ```{r define_params}
-N = as.integer(2000)    
+N = as.integer(1000)    
 time_step = 10
-N_communities = 1
-community_probs = JuliaCall::julia_eval("[1.0]", need_return =  "Julia")
-community_contact_rate = JuliaCall::julia_eval("[1.0]", need_return =  "Julia")
+N_communities = as.integer(1)
+community_probs = JuliaCall::julia_eval("community_probs = [1.0]", 
+                                        need_return =  "Julia")
+community_contact_rate = JuliaCall::julia_eval("community_contact_rate = [1.0]", 
+                                               need_return =  "Julia")
 density_dependent_fecundity = 0.0007 # for S. mansoni [Toor et al JID paper SI]
 #density_dependent_fecundity = 0.0006 # for S. haematobium [Toor et al JID paper SI]
 average_worm_lifespan = 5.7 # years for S. mansoni [Toor et al JID paper SI]
@@ -45,8 +47,8 @@ initial_miracidia_days = round(miracidia_maturity/time_step)
 init_env_cercariae = 100000*N/1000
 worm_stages = as.integer(1)
 # contact_rate = 0.1
-max_fec_contact_rate_product = 1/20
-max_fecundity = 20
+max_fec_contact_rate_product = 0.8
+max_fecundity = 0.87
 contact_rate = max_fec_contact_rate_product / max_fecundity
 
 age_contact_rates = c(0.032, 0.610, 1, 0.06)
@@ -60,10 +62,10 @@ male_factor = 1
 birth_rate = 28*time_step/(1000*365)
 human_cercariae_prop = 1
 
-predis_aggregation = 0.2 # 0.24 for high prev settings; 0.04 for low prev settings # From "The design of schistosomiasis monitoring and evaluation programmes:
+predis_aggregation = 0.24 # 0.24 for high prev settings; 0.04 for low prev settings # From "The design of schistosomiasis monitoring and evaluation programmes:
 #The importance of collecting adult data to inform treatment strategies for Schistosoma mansoni"
-cercariae_survival = 1/2
-miracidia_survival = 1/2
+cercariae_survival = 1/20
+miracidia_survival = 1/20
 death_prob_by_age = c(0.0656, 0.0093, 0.003, 0.0023, 0.0027, 0.0038, 0.0044, 0.0048, 
                       0.0053, 0.0065, 0.0088, 0.0106, 0.0144, 0.021, 0.0333, 0.0529, 
                       0.0851, 0.1366, 0.2183, 0.2998 , 0.3698, 1)
@@ -85,21 +87,23 @@ human_larvae_maturity_time = 30
 input_ages = c(4, 9, 15, 100)
 input_contact_rates = c(0.032, 0.610, 1, 0.06)
 scenario = "moderate adult"
-egg_sample_size = 1/100
-
+egg_sample_size = 1
+egg_production_distribution = "NegBin"
 pars = set_pars(N, time_step, N_communities, community_probs,
-                     community_contact_rate, density_dependent_fecundity,
-                     average_worm_lifespan, max_age, initial_worms,
-                     initial_miracidia, initial_miracidia_days, init_env_cercariae,
-                     worm_stages, contact_rate,max_fec_contact_rate_product, max_fecundity, age_contact_rates,
-                     ages_for_contacts, contact_rate_by_age_array, mda_adherence,
-                     mda_access, female_factor, male_factor, miracidia_maturity,
-                     birth_rate, human_cercariae_prop, predis_aggregation, cercariae_survival,
-                     miracidia_survival, death_prob_by_age, ages_for_death, r,
-                     vaccine_effectiveness, drug_effectiveness, spec_ages, ages_per_index,
-                     record_frequency, use_kato_katz, kato_katz_par, heavy_burden_threshold,
-                     rate_acquired_immunity, M0, human_larvae_maturity_time, egg_sample_size, input_ages, input_contact_rates,
-                     scenario)
+                community_contact_rate, density_dependent_fecundity,
+                average_worm_lifespan, max_age, initial_worms,
+                initial_miracidia, initial_miracidia_days, init_env_cercariae,
+                worm_stages, contact_rate,max_fec_contact_rate_product, 
+                max_fecundity, age_contact_rates,
+                ages_for_contacts, contact_rate_by_age_array, mda_adherence,
+                mda_access, female_factor, male_factor, miracidia_maturity,
+                birth_rate, human_cercariae_prop, predis_aggregation, cercariae_survival,
+                miracidia_survival, death_prob_by_age, ages_for_death, r,
+                vaccine_effectiveness, drug_effectiveness, spec_ages, ages_per_index,
+                record_frequency, use_kato_katz, kato_katz_par, heavy_burden_threshold,
+                rate_acquired_immunity, M0, human_larvae_maturity_time,
+                egg_sample_size,egg_production_distribution,
+                input_ages, input_contact_rates, scenario)
 
 ```
 
@@ -134,8 +138,8 @@ plot(times, sac_burden, type = 'l', col = rgb(110/255, 99/255, 252/255), bty = '
      ylim = c(0, max(sac_burden)), lwd = 2, xlab = "year", ylab = "SAC prevalence")
 lines(times, sac_heavy_burden, col = rgb(30/255, 190/255, 160/255), lwd =2 )
 abline(h = 1, lwd = 2, lty = 2, col = rgb(2/255, 163/255, 217/255))
-abline(h=c(0,10,20, 30,40,50,60,70,80,90), col = 'lightgrey')
-legend('topright',legend=c("SAC prev", "SAC heavy burden"),
+
+legend('bottomright',legend=c("SAC prev", "SAC heavy burden"),
        col=c(rgb(110/255, 99/255, 252/255), rgb(30/255, 190/255, 160/255)), lwd = c(2,2), lty = c(1,1), cex=1.2,
        title="", text.font=18, bg='lightblue', bty = 'n')
 ```
@@ -149,7 +153,7 @@ save_population_to_file(filename, e$humans,  e$miracidia, e$cercariae, pars)
 # Consider effect of MDA
 We can then investigate the use of MDA's in reducing the prevalence of schistosomiasis in the population. The MDA performed here is 75% coverage in SAC once a year and is defined in the ```create_mda``` function (run ```?create_mda``` for docs):
 ```{r mda}
-num_repeats = 10 #number of simulations to run
+num_repeats = 5 #number of simulations to run
 number_years = 20
 drug_efficacy = 0.863 #Toor et al. JID paper in SI: drug efficacy 86.3% for S. mansoni and 94% for S. haematobium
 num_time_steps = as.integer(365*number_years / time_step)
@@ -159,7 +163,8 @@ mda_info = create_mda(0, .75, 0, 1,
 
 
 
-e1 =  run_repeated_sims_no_population_change_human_larvae(filename, num_time_steps, mda_info, vaccine_info, num_repeats)
+e1 =  run_repeated_sims_no_population_change_human_larvae(
+  filename, num_time_steps, mda_info, vaccine_info, num_repeats)
 
 
 
@@ -171,13 +176,13 @@ plot(e1$times, get_dot_mean(e1$sac_prev), type = 'l', col = rgb(110/255, 99/255,
      ylim = c(0,  max(get_dot_mean(e1$sac_prev))), lwd = 2, xlab = "year", ylab = "SAC prevalence")
 lines(e1$times, get_dot_mean(e1$high_burden_sac), col = rgb(30/255, 190/255, 160/255), lwd =2 )
 abline(h = 1, lwd = 2, lty = 2, col = rgb(2/255, 163/255, 217/255))
-abline(v=c(0,5,10,15,20), col = 'lightgrey')
-abline(h=c(0,10,20, 30,40,50,60,70,80,90), col = 'lightgrey')
+#abline(v=c(0,5,10,15,20), col = 'lightgrey')
+#abline(h=c(0,10,20, 30,40,50,60,70,80,90), col = 'lightgrey')
 legend('topright',legend=c("SAC prev", "SAC heavy burden",
-                           'missed MDA window', 'heavy burden goal'),
+                            'heavy burden goal'),
        col=c(rgb(110/255, 99/255, 252/255), rgb(30/255, 190/255, 160/255)
-             ,'black', rgb(2/255, 163/255, 217/255)), lwd = c(2,2,2, 2), 
-       lty = c(1,1,2,2), cex=1.2,
+             , rgb(2/255, 163/255, 217/255)), lwd = c(2,2, 2), 
+       lty = c(1,1,2), cex=1.2,
        title="", text.font=18, bg='lightblue', bty = 'n')
 
 ```
@@ -188,7 +193,9 @@ We may wish to run some of these functions in isolation, for example to perform 
 
 To perform an MDA of 80% of the population we can run:
 ```{r individual_mda}
-humans = administer_drug(e$humans, indices = sample(1:N, N * .8), drug_effectiveness = 0.863)
+humans = administer_drug(e$humans, 
+                         indices = sample(1:N, N * .8), 
+                         drug_effectiveness = 0.863)
 ```
 Note that to perform a more sophisticated MDA we must input the indices of the MDA more carefully, for example finding all individuals whose age is in a certain range first, and then specifying the proportion who will receive MDA.
 
