@@ -24,7 +24,7 @@ schistox_setup <- function (...){
   # JuliaCall::julia_install_package_if_needed("Schistoxpkg")
   JuliaCall::julia_library("Distributions")
   JuliaCall::julia_library("Random")
-  JuliaCall::julia_library("JLD")
+  JuliaCall::julia_library("JLD2")
   JuliaCall::julia_library("Schistoxpkg")
 }
 
@@ -54,13 +54,15 @@ default_pars <- function(){
 #' }
 #' @export
 save_population_to_file <- function(filename, humans, miracidia, cercariae, pars){
+  
   JuliaCall::julia_assign("filename", filename)
   JuliaCall::julia_assign("humans", humans)
   JuliaCall::julia_assign("miracidia", miracidia)
   JuliaCall::julia_assign("pars", pars)
   JuliaCall::julia_assign("cercariae", cercariae)
-
-  JuliaCall::julia_eval("save_population_to_file(filename, humans, miracidia, cercariae, pars)")
+  
+  JuliaCall::julia_eval("jldsave(filename, humans=humans, miracidia=miracidia, 
+                        cercariae=cercariae, pars=pars)")
 }
 
 
