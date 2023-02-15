@@ -1,6 +1,6 @@
 # SchistoxpkgR
 
-This R library is a wrapper for the Julia package Schistoxpkg (https://github.com/mattg3004/Schistoxpkg.jl).
+This R library is a wrapper for the Julia package Schistoxpkg (https://github.com/mattg3004/Schistoxpkg.jl) developed by Matt Graham.
 
 ## Installation
 
@@ -13,13 +13,13 @@ To install the master branch of the package you need to have devtools installed.
 After this, you can run the following to install the package:
 ```R
 > library(devtools) 
-> devtools::install_github('mattg3004/SchistoxpkgR', build_vignettes=T)
+> devtools::install_github('mutono/SchistoxR', build_vignettes=T)
 ```
 This will build a vignette, which will take some time, so the installation of the package may take a few minutes.
 
 After installation is complete, to view the vignette run the following:
 ```R
-> browseVignettes("SchistoxpkgR")
+> browseVignettes("SchistoxR")
 ```
 
 
